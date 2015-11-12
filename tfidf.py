@@ -2,6 +2,8 @@ from __future__ import division
 import re, string, math, random
 from porter2 import stem
 
+import crawler
+
 
 punct = re.compile(r'[\s{}]+'.format(re.escape(string.punctuation)))
 k = 2
