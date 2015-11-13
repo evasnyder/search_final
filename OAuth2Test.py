@@ -1,9 +1,20 @@
-from rauth import OAuth2Service
+import requests, urllib2
 
-genius = OAuth2Service(
-    client_id='azPARsJ8P5HyP_msTQmSQq1pB7EjHmQLP6EuSnVYnrd7ACivST7j8eOKpw53BBkc',
-    client_secret='XZ8uklwLdkzk1bsrj1FICspuQKPl8xipRZD7kP6EunL9FN7ZxOb_EGW4xRrhD3cdi5k3RP0tt-Zyi_7F6ttLiQ',
-    name='genius',
-    authorize_url='https://api.genius.com/oauth/authorize',
-    access_token_url='https://api.genius.com/oauth/50Li8ZJ-fN7eCvpeFQTVfkS1ttoWnJMZKkXIxxqax9oBRCoNJ9xJvksqKEHNILCy',
-    base_url='https://genius.com/')
+headers = {"User-Agent": "Weezy", "Accept": "application/json", "Host":"api.genius.com", "Authorization": "Bearer " + "50Li8ZJ-fN7eCvpeFQTVfkS1ttoWnJMZKkXIxxqax9oBRCoNJ9xJvksqKEHNILCy"}
+
+def genius_search(search_query):
+    search_query = urllib2.quote(search_query)
+    response = requests.get("https://api.genius.com/search?q=" + "search_query", headers=headers)
+    return response.json()
+
+def artist_search(search_query, number_results = ''):
+    if number_results != '':
+        number_results = "?per_page=" + str(number_results)
+    if search_query.is_integer():
+        response = requests.get("https://api.genius.com/artists/" + "search_query" + "/songs" + number_results, headers=headers)
+    return response.json()
+
+me_json = genius_search("I'm mad")
+
+# test for printing some information about a result. Results come in batches of 19 elements from the Search request
+print str(me_json["response"]["hits"][18]["result"]['title'])
