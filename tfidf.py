@@ -9,14 +9,19 @@ punct = re.compile(r'[\s{}]+'.format(re.escape(string.punctuation)))
 k = 2
 
 # Split up each document by line break and remove any access white spaces
-def tokenize(file_name):
-	d = open(file_name, 'r')
-	d_text = d.read()
-	d.close()
+def tokenizeFile(file_name):
+	lyrics = open(file_name, 'r')
+	lyrics_text = lyrics.read()
+	lyrics.close()
 
-	sentences_d = d_text.split('\n')
-	sentences_d.remove('')
-	return sentences_d
+	sentences_lyrics = lyrics_text.split('\n')
+	sentences_lyrics.remove('')
+	return sentences_lyrics
+
+def tokenizeSample(sample):
+	sentences_sample = sample.split('\n')
+	sentences_sample.remove('')
+	return sentences_sample
 
 def remove_stopwords(): 
 	stopwords_file = open('stopwords.txt', 'r')
@@ -110,7 +115,7 @@ def output_similarities(documents, querytf_list, documenttf, collection_length, 
 
 
 my_queries = tokenize('qrys.txt')
-my_documents = tokenize('docs.txt')
+my_documents = tokenizeFile('lyrics.txt')
 my_stopwords = remove_stopwords()
 my_docs = create_docword_list(my_documents, my_stopwords)
 my_documenttf = create_documenttf_dict(my_docs)
