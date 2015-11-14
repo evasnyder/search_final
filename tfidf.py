@@ -33,11 +33,13 @@ def remove_stopwords():
 # create a list of query term frequencies per word
 def create_querytf_list(query_list, stopwords):
 	querytf_list = list()
-	for query in query_list:
+	# for query in query_list:
 		# lowercase every query word
 		formatted_query = punct.split(query.lower())
 		formatted_query = [w for w in formatted_query if w not in stopwords]
+
 		# formatted_query = [stem(w) for w in formatted_query]
+
 		# truncate number from query
 		formatted_query = formatted_query[1:]
 		querytf_dict = dict()
@@ -61,6 +63,7 @@ def create_docword_list(doc_list, stopwords):
 		# lower case everything
 		formatted_doc = punct.split(doc.lower())
 		formatted_doc = [w for w in formatted_doc if w not in stopwords]
+		
 		# formatted_doc = [stem(w) for w in formatted_doc]
 
 		# save the number as the first thing
