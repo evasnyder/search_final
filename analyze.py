@@ -1,3 +1,4 @@
 
 
-def count
+def countWordsPerSong(): 
+	
