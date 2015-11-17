@@ -1,8 +1,11 @@
-import requests, urllib2
+import requests, urllib2, time
 from bs4 import BeautifulSoup
 from shutil import copy2
 from time import clock
 from os import makedirs
+
+start_time = time.time()
+artists_imported_count = 0
 
 # required headers for API access to the Genius services
 headers = {"User-Agent": "Eva eats leggings", "Accept": "application/json", "Host":"api.genius.com", "Authorization": "Bearer " + "50Li8ZJ-fN7eCvpeFQTVfkS1ttoWnJMZKkXIxxqax9oBRCoNJ9xJvksqKEHNILCy"}
@@ -25,7 +28,8 @@ def artist_search(search_query, number_results = ''):
 
 # should be passed a list of lyric page urls
 def lyric_handler(url_list):
-    
+    global artists_imported_count
+    artists_imported_count += 1
     db_file = open('lyrics.json', 'a')
     for json in url_list:
         url = json['url']
@@ -60,4 +64,6 @@ def scrap_lyrics_by_artist(base, top_bound = None):
             lyric_handler(artist_test["response"]["songs"])
 
 #last run: artist_id 5 thru 6, need a re-run
-scrap_lyrics_by_artist(1, 13)
+scrap_lyrics_by_artist(55, 60)
+print("--- %s seconds ---" % (time.time() - start_time))
+print str(artists_imported_count) + ' artists imported'
