@@ -43,10 +43,7 @@ def lyric_handler(url_list):
 def build_document_string(artist, song, lyrics, url):
     return '{\"artist\": \"' + artist + '\", ' + '\"song\": \"' + song + '\", ' + '\"lyrics\": \"' + lyrics + '\", ' + '\"url\": \"' + url + '\"}'
 
-def backup_file:
-    new_file_path = 'backups'
-    makedirs(new_file_path)
-    copy2('lyrics.json', 'backups')
+
 
 # runner function for file; pass a base artist ID and the bounds artist ID
 def scrap_lyrics_by_artist(base, top_bound = None):
