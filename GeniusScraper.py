@@ -1,13 +1,19 @@
 import requests, urllib2
 from bs4 import BeautifulSoup
+from shutil import copy2
+from time import clock
+from os import makedirs
 
-headers = {"User-Agent": "Weezy", "Accept": "application/json", "Host":"api.genius.com", "Authorization": "Bearer " + "50Li8ZJ-fN7eCvpeFQTVfkS1ttoWnJMZKkXIxxqax9oBRCoNJ9xJvksqKEHNILCy"}
+# required headers for API access to the Genius services
+headers = {"User-Agent": "Eva eats leggings", "Accept": "application/json", "Host":"api.genius.com", "Authorization": "Bearer " + "50Li8ZJ-fN7eCvpeFQTVfkS1ttoWnJMZKkXIxxqax9oBRCoNJ9xJvksqKEHNILCy"}
 
+# returns 19 results
 def genius_search(search_query):
     search_query = urllib2.quote(search_query)
     response = requests.get("https://api.genius.com/search?q=" + "search_query", headers=headers)
     return response.json()
 
+# should be passed the artist ID we're searching for
 def artist_search(search_query, number_results = ''):
     if number_results != '':
         number_results = "?per_page=" + str(number_results)
@@ -17,30 +23,44 @@ def artist_search(search_query, number_results = ''):
         response = requests.get(request_url, headers=headers)
     return response.json()
 
+# should be passed a list of lyric page urls
 def lyric_handler(url_list):
+    
+    db_file = open('lyrics.json', 'a')
     for json in url_list:
-        url = json['result']['url']
+        url = json['url']
         page = requests.get(url)
 
         soup = BeautifulSoup(page.text, "lxml")
-
-        date = soup.find('p', class_='release_date song_meta_item')
-        if date is not None:
-            date = soup.find('p', class_='release_date song_meta_item').text.strip()
+        artist = soup.find('span', class_='text_artist').text.strip()
         lyrics = soup.find('div', class_='lyrics').text.strip()
+        song_title = soup.find('span', class_='text_title').text.strip()
 
-       # print 'Lyrics: ', lyrics
-        print 'Date: ', date
+        db_file.write(build_document_string(artist, song_title, lyrics, url).encode('utf8') + '\n')
+    db_file.close()
 
-me_json = genius_search("la di da di")
+# formats scraped information for the json document
+def build_document_string(artist, song, lyrics, url):
+    return '{\"artist\": \"' + artist + '\", ' + '\"song\": \"' + song + '\", ' + '\"lyrics\": \"' + lyrics + '\", ' + '\"url\": \"' + url + '\"}'
 
-artist_test = artist_search(1, 2000)
-print artist_test['response']['songs'][0]['primary_artist']['name']
+def backup_file:
+    new_file_path = 'backups'
+    makedirs(new_file_path)
+    copy2('lyrics.json', 'backups')
 
-#print 'Kendrick Lamar songs returned: ' + str(len(artist_test["response"]))
+# runner function for file; pass a base artist ID and the bounds artist ID
+def scrap_lyrics_by_artist(base, top_bound = None):
+    if top_bound != None:
+        for i in range(base, top_bound):
+            artist_test = artist_search(i, 2000)
+            if artist_test["meta"]["status"] != 404:
+                copy2('lyrics.json', 'backups')
+                lyric_handler(artist_test["response"]["songs"])
+    else:
+        artist_test = artist_search(base, 2000)
+        if artist_test["meta"]["status"] != 404:
+            copy2('lyrics.json', 'backups')
+            lyric_handler(artist_test["response"]["songs"])
 
-print len(artist_test['response']['songs'])
-
-lyric_handler(me_json["response"]["hits"])
-# test for printing some information about a result. Results come in batches of 19 elements from the Search request
-
+#last run: artist_id 5 thru 6, need a re-run
+scrap_lyrics_by_artist(1, 13)
