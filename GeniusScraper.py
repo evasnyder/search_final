@@ -1,8 +1,9 @@
-import requests, urllib2, time, string, re
+import requests, urllib2, time, string, re, pymongo
 from bs4 import BeautifulSoup
 from shutil import copy2
 from time import clock
 from os import makedirs
+from pymongo import MongoClient
 
 start_time = time.time()
 artists_imported_count = 0
@@ -73,6 +74,16 @@ def scrap_lyrics_by_artist(base, top_bound = None):
         if artist_test["meta"]["status"] != 404:
             copy2('lyrics.json', 'backups')
             lyric_handler(artist_test["response"]["songs"])
+
+client = MongoClient()
+client = MongoClient('localhost', 8888)
+client = MongoClient('mongodb://localhost:8888/')
+
+db = client.test_database
+db = client['test-database']
+
+collection = db.test_collection
+collection = db['test-collection']
 
 
 my_stopwords = remove_stopwords()
