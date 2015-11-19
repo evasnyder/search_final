@@ -1,4 +1,4 @@
-import requests, urllib2, time
+import requests, urllib2, time, string, re
 from bs4 import BeautifulSoup
 from shutil import copy2
 from time import clock
@@ -9,6 +9,14 @@ artists_imported_count = 0
 
 # required headers for API access to the Genius services
 headers = {"User-Agent": "Eva eats leggings", "Accept": "application/json", "Host":"api.genius.com", "Authorization": "Bearer " + "50Li8ZJ-fN7eCvpeFQTVfkS1ttoWnJMZKkXIxxqax9oBRCoNJ9xJvksqKEHNILCy"}
+punct = re.compile(r'[\s{}]+'.format(re.escape(string.punctuation)))
+
+def remove_stopwords(): 
+    stopwords_file = open('stopwords.txt', 'r')
+    stopwords = stopwords_file.read()
+    stopwords = stopwords.split('\n')
+    stopwords_file.close()
+    return stopwords
 
 # returns 19 results
 def genius_search(search_query):
@@ -40,7 +48,10 @@ def lyric_handler(url_list):
         lyrics = soup.find('div', class_='lyrics').text.strip()
         song_title = soup.find('span', class_='text_title').text.strip()
 
-        db_file.write(build_document_string(artist, song_title, lyrics, url).encode('utf8') + '\n')
+        processed_lyrics = punct.split(lyrics.lower())
+        processed_lyrics = [w for w in processed_lyrics if w not in stopwords]
+
+        db_file.write(build_document_string(artist, song_title, processed_lyrics, url).encode('utf8') + '\n')
     db_file.close()
 
 # formats scraped information for the json document
@@ -63,6 +74,8 @@ def scrap_lyrics_by_artist(base, top_bound = None):
             copy2('lyrics.json', 'backups')
             lyric_handler(artist_test["response"]["songs"])
 
+
+my_stopwords = remove_stopwords()
 #last run: artist_id 5 thru 6, need a re-run
 scrap_lyrics_by_artist(55, 60)
 print("--- %s seconds ---" % (time.time() - start_time))
