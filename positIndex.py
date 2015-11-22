@@ -54,27 +54,22 @@ def create_posit(split_doc):
 	posit_index = {}
 	posit_counter = 0
 	song_counter = 0
+
 	for song in split_doc:
 		# reset the positional counter back to zero when you go to the next song
 		posit_counter = 0
 		for word in song:
 			# if the word is already in the positional index 
 			if word in posit_index: 
-				# locations_of_words = {}
 				locations_of_words = posit_index[word]
-				print 'locations of words ' + str(locations_of_words)
 					
 				# the word is appearing twice in the same song...
 				if song_counter in locations_of_words:
-					print 'Locations of words at song counter' + str(locations_of_words[song_counter])
-					# print 'index alreadyyy ' + str(posit_index) + str(word)
-
-					test = [locations_of_words[song_counter]]
-					# print 'LIST LIST TEST TEST ' + str(test)
+					print posit_index[word][song_counter]
+					posit_index[word][song_counter].append(posit_counter)
+					'''test = [locations_of_words[song_counter]]
 					test.append(posit_counter)
-					# print test
-					locations_of_words[song_counter] = test
-					# print test
+					locations_of_words[song_counter] = test'''
 
 
 
@@ -82,10 +77,13 @@ def create_posit(split_doc):
 
 				# if we're looking at a new song add the positional a new song list
 				else:
+					print 'Baby else'
 					test = list() 
 					test.append(posit_counter)
 					# print 'new song bitches' + str(test)
-					locations_of_words[song_counter] = posit_counter
+					posit_index[word][song_counter] = list()
+					posit_index[word][song_counter].append(posit_counter)
+					print locations_of_words[song_counter]
 				
 				# if we have the same word in the same document...
 				# else: 
@@ -108,7 +106,8 @@ def create_posit(split_doc):
 			# if the word is not in the positional index yet
 			else:
 				locations_of_words = {}
-				locations_of_words[song_counter] = posit_counter
+				locations_of_words[song_counter] = list()
+				locations_of_words[song_counter].append(posit_counter)
 				posit_index[word] = locations_of_words
 			posit_counter += 1
 		song_counter += 1
@@ -118,22 +117,22 @@ def create_posit(split_doc):
 def positional_index(tokens):
     d = defaultdict(lambda:[])
     for docID, sub_l in enumerate(tokens):
-    	print docID
+    	#print docID
         for t in set(sub_l):
-        	print t
+      #  	print t
         	d[t].append([docID] + [ind for ind, ele in enumerate(sub_l) if ele == t])
-    print d
+   # print d
     return d
 
 
 lyrics = tokenizeFile('test_songs.txt')
-print lyrics
+#print lyrics
 my_stopwords = remove_stopwords()
 my_docs = create_docword_list(lyrics, my_stopwords)
-print my_docs
+#print my_docs
 # create_posit(my_docs)
 
-positional_index(my_docs)
+create_posit(my_docs)
 
 
 
