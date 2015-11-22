@@ -4,6 +4,7 @@ from collections import defaultdict
 import json
 
 import crawler
+import itertools
 
 
 punct = re.compile(r'[\s{}]+'.format(re.escape(string.punctuation)))
@@ -61,17 +62,19 @@ def create_posit(split_doc):
 			if word in posit_index: 
 				# locations_of_words = {}
 				locations_of_words = posit_index[word]
-				#print locations_of_words
+				print 'locations of words ' + str(locations_of_words)
 					
 				# the word is appearing twice in the same song...
 				if song_counter in locations_of_words:
+					print 'Locations of words at song counter' + str(locations_of_words[song_counter])
 					# print 'index alreadyyy ' + str(posit_index) + str(word)
 
 					test = [locations_of_words[song_counter]]
-					print 'LIST LIST TEST TEST ' + str(test)
+					# print 'LIST LIST TEST TEST ' + str(test)
 					test.append(posit_counter)
+					# print test
 					locations_of_words[song_counter] = test
-					print test
+					# print test
 
 
 
@@ -112,9 +115,26 @@ def create_posit(split_doc):
 	print posit_index
 
 
+def positional_index(tokens):
+    d = defaultdict(lambda:[])
+    for docID, sub_l in enumerate(tokens):
+    	print docID
+        for t in set(sub_l):
+        	print t
+        	d[t].append([docID] + [ind for ind, ele in enumerate(sub_l) if ele == t])
+    print d
+    return d
+
+
 lyrics = tokenizeFile('test_songs.txt')
 print lyrics
 my_stopwords = remove_stopwords()
 my_docs = create_docword_list(lyrics, my_stopwords)
 print my_docs
-create_posit(my_docs)
+# create_posit(my_docs)
+
+positional_index(my_docs)
+
+
+
+
