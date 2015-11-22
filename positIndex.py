@@ -1,6 +1,7 @@
 from __future__ import division
 import re, string, math, random
-from porter2 import stem
+from collections import defaultdict
+import json
 
 import crawler
 
@@ -15,7 +16,7 @@ def tokenizeFile(file_name):
 	lyrics.close()
 
 	sentences_lyrics = lyrics_text.split('\n')
-	sentences_lyrics.remove('')
+ 	# sentences_lyrics.remove('')
 	return sentences_lyrics
 
 def tokenizeSample(sample):
@@ -29,6 +30,75 @@ def remove_stopwords():
 	stopwords = stopwords.split('\n')
 	stopwords_file.close()
 	return stopwords
+# Creat the list of document words formatted and split correctly
+def create_docword_list(doc_list, stopwords):
+	docword_list = list()
+	# for every document in our collection
+	for doc in doc_list:
+		# lower case everything
+		formatted_doc = punct.split(doc.lower())
+		formatted_doc = [w for w in formatted_doc if w not in stopwords]
 
-lyrics = tokenizeFile('test_lyrics.txt')
+		# save the number as the first thing
+		formatted_doc = formatted_doc[1:]
+
+		# remove any extra whitespace
+		if '' in formatted_doc:
+			formatted_doc.remove('')
+		# add the formated document to the final list of document
+		docword_list.append(formatted_doc)
+	return docword_list
+
+def create_posit(split_doc):
+	posit_index = {}
+	posit_counter = 0
+	song_counter = 0
+	for song in split_doc:
+		# reset the positional counter back to zero when you go to the next song
+		posit_counter = 0
+		for word in song:
+			posit_counter += 1
+			# if the word is already in the positional index 
+			if word in posit_index: 
+				# locations_of_words = {}
+				locations_of_words = posit_index[word]
+				print locations_of_words
+				
+				# if we're looking at a new song add the positional a new song list
+				if not song_counter in locations_of_words: 
+					# test = list() 
+					# test = [posit_counter]
+					# print 'new song bitches' + str(test)
+					locations_of_words[song_counter] = posit_counter
+				
+				# if we have the same word in the same document...
+				else: 
+					# add the positional to the list already there
+					# test = list()
+					test = locations_of_words[song_counter]
+					print 'test test test ' + str(test)
+					test.append(posit_counter)
+					print test
+					locations_of_words[song_counter] = locations_of_words[song_counter] + (posit_counter)
+					# print 'same word in same song...' + str(test)
+					#song[song_counter] = song[song_counter] + [posit_counter]
+					# test.append(posit_counter)
+					# song[song_counter] = test
+				
+				posit_index[word] = locations_of_words
+
+			# if the word is not in the positional index yet
+			else:
+				locations_of_words = {}
+				locations_of_words[song_counter] = posit_counter
+				posit_index[word] = locations_of_words
+		song_counter += 1
+	print posit_index
+
+
+lyrics = tokenizeFile('test_songs.txt')
+print lyrics
 my_stopwords = remove_stopwords()
+my_docs = create_docword_list(lyrics, my_stopwords)
+print my_docs
+create_posit(my_docs)
