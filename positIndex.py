@@ -57,41 +57,57 @@ def create_posit(split_doc):
 		# reset the positional counter back to zero when you go to the next song
 		posit_counter = 0
 		for word in song:
-			posit_counter += 1
 			# if the word is already in the positional index 
 			if word in posit_index: 
 				# locations_of_words = {}
 				locations_of_words = posit_index[word]
-				print locations_of_words
-				
+				#print locations_of_words
+					
+				# the word is appearing twice in the same song...
+				if song_counter in locations_of_words:
+					# print 'index alreadyyy ' + str(posit_index) + str(word)
+
+					test = [locations_of_words[song_counter]]
+					print 'LIST LIST TEST TEST ' + str(test)
+					test.append(posit_counter)
+					locations_of_words[song_counter] = test
+					print test
+
+
+
+
+
 				# if we're looking at a new song add the positional a new song list
-				if not song_counter in locations_of_words: 
-					# test = list() 
-					# test = [posit_counter]
+				else:
+					test = list() 
+					test.append(posit_counter)
 					# print 'new song bitches' + str(test)
 					locations_of_words[song_counter] = posit_counter
 				
 				# if we have the same word in the same document...
-				else: 
+				# else: 
 					# add the positional to the list already there
-					# test = list()
-					test = locations_of_words[song_counter]
-					print 'test test test ' + str(test)
-					test.append(posit_counter)
-					print test
-					locations_of_words[song_counter] = locations_of_words[song_counter] + (posit_counter)
+					# test = {}
+					# test = locations_of_words[song_counter]
+					# print 'test test test ' + str(test)
+					# test += posit_counter
+					# test.insert(len(test), posit_counter)
+					# test.append(posit_counter)
+					# print test
+					# locations_of_words[song_counter] = locations_of_words[song_counter] + (posit_counter)
 					# print 'same word in same song...' + str(test)
 					#song[song_counter] = song[song_counter] + [posit_counter]
 					# test.append(posit_counter)
 					# song[song_counter] = test
 				
-				posit_index[word] = locations_of_words
+				# posit_index[word] = locations_of_words
 
 			# if the word is not in the positional index yet
 			else:
 				locations_of_words = {}
 				locations_of_words[song_counter] = posit_counter
 				posit_index[word] = locations_of_words
+			posit_counter += 1
 		song_counter += 1
 	print posit_index
 
