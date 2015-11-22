@@ -31,6 +31,7 @@ def remove_stopwords():
 	stopwords = stopwords.split('\n')
 	stopwords_file.close()
 	return stopwords
+
 # Creat the list of document words formatted and split correctly
 def create_docword_list(doc_list, stopwords):
 	docword_list = list()
@@ -65,43 +66,14 @@ def create_posit(split_doc):
 					
 				# the word is appearing twice in the same song...
 				if song_counter in locations_of_words:
-					print posit_index[word][song_counter]
 					posit_index[word][song_counter].append(posit_counter)
-					'''test = [locations_of_words[song_counter]]
-					test.append(posit_counter)
-					locations_of_words[song_counter] = test'''
-
-
-
-
 
 				# if we're looking at a new song add the positional a new song list
 				else:
-					print 'Baby else'
 					test = list() 
 					test.append(posit_counter)
-					# print 'new song bitches' + str(test)
 					posit_index[word][song_counter] = list()
 					posit_index[word][song_counter].append(posit_counter)
-					print locations_of_words[song_counter]
-				
-				# if we have the same word in the same document...
-				# else: 
-					# add the positional to the list already there
-					# test = {}
-					# test = locations_of_words[song_counter]
-					# print 'test test test ' + str(test)
-					# test += posit_counter
-					# test.insert(len(test), posit_counter)
-					# test.append(posit_counter)
-					# print test
-					# locations_of_words[song_counter] = locations_of_words[song_counter] + (posit_counter)
-					# print 'same word in same song...' + str(test)
-					#song[song_counter] = song[song_counter] + [posit_counter]
-					# test.append(posit_counter)
-					# song[song_counter] = test
-				
-				# posit_index[word] = locations_of_words
 
 			# if the word is not in the positional index yet
 			else:
@@ -113,27 +85,7 @@ def create_posit(split_doc):
 		song_counter += 1
 	print posit_index
 
-
-def positional_index(tokens):
-    d = defaultdict(lambda:[])
-    for docID, sub_l in enumerate(tokens):
-    	#print docID
-        for t in set(sub_l):
-      #  	print t
-        	d[t].append([docID] + [ind for ind, ele in enumerate(sub_l) if ele == t])
-   # print d
-    return d
-
-
 lyrics = tokenizeFile('test_songs.txt')
-#print lyrics
 my_stopwords = remove_stopwords()
 my_docs = create_docword_list(lyrics, my_stopwords)
-#print my_docs
-# create_posit(my_docs)
-
 create_posit(my_docs)
-
-
-
-
