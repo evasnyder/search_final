@@ -83,7 +83,8 @@ def create_posit(split_doc):
 				posit_index[word] = locations_of_words
 			posit_counter += 1
 		song_counter += 1
-	print posit_index
+	return posit_index
+	# print posit_index
 
 lyrics = tokenizeFile('test_songs.txt')
 my_stopwords = remove_stopwords()
