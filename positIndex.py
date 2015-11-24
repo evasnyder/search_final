@@ -52,7 +52,7 @@ def create_docword_list(doc_list, stopwords):
 	return docword_list
 
 def create_posit(split_doc):
-	posit_index = {}
+	posit_index = {} 
 	posit_counter = 0
 	song_counter = 0
 
