@@ -33,6 +33,7 @@ def add_positional_index(db, positional_index, song_id):
 		document_id = doc["_id"]
 		
 		test_db.update_one({"_id" : document_id}, {'$addToSet' : {song_key : {'$each' : position_data} } } )
+		#  Makes sure the positional elements within each song's entry in each word are in order
 		test_db.update_one({"_id" : document_id}, {'$push' : {song_key : { '$each' : [], '$sort' : 1} } } )
 
 #  Tests should live here
