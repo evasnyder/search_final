@@ -25,7 +25,7 @@ def tokenizeSample(sample):
 	sentences_sample.remove('')
 	return sentences_sample
 
-def remove_stopwords(): 
+def get_stopwords(): 
 	stopwords_file = open('stopwords.txt', 'r')
 	stopwords = stopwords_file.read()
 	stopwords = stopwords.split('\n')
@@ -84,9 +84,8 @@ def create_posit(split_doc):
 			posit_counter += 1
 		song_counter += 1
 	return posit_index
-	# print posit_index
 
 lyrics = tokenizeFile('test_songs.txt')
-my_stopwords = remove_stopwords()
+my_stopwords = get_stopwords()
 my_docs = create_docword_list(lyrics, my_stopwords)
 create_posit(my_docs)

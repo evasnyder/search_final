@@ -9,12 +9,6 @@ def main(self):
 
 	# search through lyrics in the inverse doucument database that have the first word of the query
 
-	cursor = db.restaurants.find({"grades.score": {"$gt": 30}})
 
-	for document in cursor:
-    	print(document)
-
-
-def initialize(self):	
-
+def initialize(self):
 
