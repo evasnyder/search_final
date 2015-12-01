@@ -46,6 +46,12 @@ def getLists(query, posititional_Index):
 
 
 def compareLists(query, posititional_Index, docsToCheck):
+	index_1 = 0 
+	index_2 = 0
+
+	for doc in docsToCheck:
+		for word in query:
+			
 	# compare the lists of positional indexes in the documents that have all of the query words within them 
 
 
