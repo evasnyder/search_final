@@ -45,15 +45,48 @@ def getLists(query, posititional_Index):
    	print 'docs to check: ' + str(docsToCheck)
 
 
-def compareLists(query, posititional_Index, docsToCheck):
+def compareLists(query, positional_Index, docsToCheck):
 	index_1 = 0 
 	index_2 = 0
 
 	for doc in docsToCheck:
 		for word in query:
-			print posititional_Index[word][doc]
+			# get the positioanl indexes lists for all of the words in the query for the given document number
+			# save them somewhere so you can access them 
+
+		# compare the lists of positional indexes in the documents that have all of the query words within them 
+
+		# if index 2 and index 2 are in the same position in the document..
+		# this would hopefully never happen
+		if positional_index[word][doc][index_2] - positional_index[word][doc][index_1] = 0: 
+			index_2 += 1
+			index_1 += 1
+			print "Index 1 and Index 2 have the same value"
+
+		# if the words come continuous to eachother then we have a match! 
+		else if positional_index[word][doc][index_2] - positional_index[word][doc][index_1] = 1: 
+			# match!
+			# record the match somewhere 
+			# advance both indexes 
+			index_2 += 1
+			index_1 += 1
+
+			# repeat again for however many words are in the query.....????
+			print "We have a match!"
 			
-	# compare the lists of positional indexes in the documents that have all of the query words within them 
+		else if positional_index[word][doc][index_2] - positional_index[word][doc][index_1] > 1: 
+			index_1 =+ 1
+			print "advance index 1 because 2 is a lot larger"
+
+		else if positional_index[word][doc][index_1] - positional_index[word][doc][index_2] > 1:
+			index_2 += 1
+			# advance index 2 because index 1 is a lot larger 
+			print "Advance index 2 because index 1 is a lot larger"
+
+		# repeat for every word in the document.  Always doing it in pairs of two. 
+		# if we have a match, we should advance vertically
+		# or we just look at the data post processing and figure out if all words in the query come conescutively?
+
 
 
 getLists(formatted_query, posititional_Index)
