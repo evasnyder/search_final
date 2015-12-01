@@ -78,7 +78,7 @@ def createPositionalIndex(split_doc):
 		song_counter += 1
 	return posit_index
 
-lyrics = open("bracket_test.txt", 'r')
+lyrics = open("test_songs.txt", 'r')
 lyrics_text = lyrics.read()
 lyrics.close()
 
