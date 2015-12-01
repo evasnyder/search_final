@@ -54,12 +54,22 @@ def createPositionalIndex(song):
 		posit_counter += 1
 	return posit_index
 
+<<<<<<< HEAD
+lyrics = open("test_songs.txt", 'r')
+lyrics_text = lyrics.read()
+lyrics.close()
+=======
 def lazyTests():
 	lyrics = open("bracket_test.txt", 'r')
 	lyrics_text = lyrics.read()
 	lyrics.close()
 
 	toked = createDocwordList([lyrics_text], getStopwords())
+<<<<<<< HEAD
 	print createPositionalIndex(toked[0])
+=======
+	print createPositionalIndex(toked[0], "420blazeit")
+>>>>>>> origin/master
+>>>>>>> origin/master
 
 #lazyTests()
