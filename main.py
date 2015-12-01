@@ -1,4 +1,4 @@
-import sys, tfidf.py
+import sys, tfidf, GeniusScraper
 from pymongo import MongoClient
 from datetime import datetime
 
@@ -10,5 +10,8 @@ def main(self):
 	# search through lyrics in the inverse doucument database that have the first word of the query
 
 
-def initialize(self):
+#def initialize(self):
+
+def test_main(from, to):
+
 
