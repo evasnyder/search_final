@@ -13,10 +13,15 @@ def main(self):
 
 def test_main(from, to):
 
-	artist_list = GeniusScraper.scrape_lyrics_by_artist(1, 2)
+	artist_list = geniusScraper.scrapeLyricsByArtist(1, 2)
 	if artist_list != None:
 			for song_list in artist_list:
 				for song in song_list:
-					db = db_delegate.get_db_connection()
-					song_id = db_delegate.add_song_metadata(db, song.url, song.artist, song.title)
+					db = dBDelegate.getDBConnection()
+					song_lyrics = positionalIndex.tokenizeText(song.lyrics)
+					song_id = dBDelegate.addSongMetadata(db, song.url, song.artist, song.title)
+
+					song_positional = positionalIndex.createPositionalIndex(song_lyrics, song_id)
+					dBDelegate.addPositionalIndex(db, song_positional, song_id)
+
 					

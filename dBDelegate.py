@@ -1,5 +1,5 @@
 from pymongo import MongoClient
-from GeniusScraper import Song
+from geniusScraper import Song
 from datetime import datetime
 
 
@@ -13,8 +13,8 @@ def getDBConnection():
 def addSongMetadata(db, url, artist, title):
 	song_check = db.songs.find({"url": url})
 
-	song_exists_check = db.songs.findOne({"url": url})
-	if song_exists_check.count() == 0:
+	song_exists_check = db.songs.find_one({"url": url})
+	if len(song_exists_check) == 0:
 		result = db.songs.insert_one({'url' : url, 'artist' : artist, 'title' : title})
 		return result.inserted_id
 	else:
@@ -28,22 +28,21 @@ def addPositionalIndex(db, positional_index, song_id):
 
 	song_key = "document_dict." + song_id
 
-	for word, documents in positional_index.iteritems():
-
-		doc = db.lyrics_database.find({"word": word})[0]
-		document_id = doc["_id"]
+	for word, positions in positional_index.iteritems():
 		
-		test_db.update_one({"_id" : document_id}, {'$addToSet' : {song_key : {'$each' : position_data} } } )
+		db.word_index.update_one({"word" :word}, {'$addToSet' : {song_key : {'$each' : positions} } } )
 		#  Makes sure the positional elements within each song's entry in each word are in order
-		test_db.update_one({"_id" : document_id}, {'$push' : {song_key : { '$each' : [], '$sort' : 1} } } )
+		db.word_index.update_one({"word" : word}, {'$push' : {song_key : { '$each' : [], '$sort' : 1} } } )
 
 
 #  Tests should live here
 def lazyTests():
 	songs_db = MongoClient().test
-	add_song(songs_db, "google.com", "Internet", "Your Privacy (Is A Joke To Us)")
-	add_song(songs_db, "google.com", "Internet", "Your Privacy (Is A Joke To Us)")
+	addSongMetadata(songs_db, "google.com", "Internet", "Your Privacy (Is A Joke To Us)")
+	addSongMetadata(songs_db, "google.com", "Internet", "Your Privacy (Is A Joke To Us)")
 	cursor = songs_db.songs.find()
 
 	for doc in cursor:
 		print doc
+
+lazyTests()

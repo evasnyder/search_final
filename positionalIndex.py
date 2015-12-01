@@ -23,11 +23,6 @@ def tokenizeText(lyrics_text):
 	
 	return lyrics
 
-def tokenizeSample(sample):
-	sentences_sample = sample.split('\n')
-	sentences_sample.remove('')
-	return sentences_sample
-
 def getStopwords(): 
 	stopwords_file = open('stopwords.txt', 'r')
 	stopwords = stopwords_file.read()
@@ -44,43 +39,27 @@ def createDocwordList(doc_list, stopwords):
 		docword_list.append(formatted_doc)
 	return docword_list
 
-def createPositionalIndex(split_doc):
-	posit_index = {} 
+def createPositionalIndex(song, song_id):
+	posit_index = {}
 	posit_counter = 0
-	song_counter = 0
-
-	for song in split_doc:
-		# reset the positional counter back to zero when you go to the next song
-		posit_counter = 0
-		for word in song:
-			# if the word is already in the positional index 
-			if word in posit_index: 
-				locations_of_words = posit_index[word]
-					
-				# the word is appearing twice in the same song...
-				if song_counter in locations_of_words:
-					posit_index[word][song_counter].append(posit_counter)
-
-				# if we're looking at a new song add the positional a new song list
-				else:
-					test = list() 
-					test.append(posit_counter)
-					posit_index[word][song_counter] = list()
-					posit_index[word][song_counter].append(posit_counter)
-
-			# if the word is not in the positional index yet
-			else:
-				locations_of_words = {}
-				locations_of_words[song_counter] = list()
-				locations_of_words[song_counter].append(posit_counter)
-				posit_index[word] = locations_of_words
-			posit_counter += 1
-		song_counter += 1
+	
+	for word in song:
+		# if the word is already in the positional index 
+		if word in posit_index: 
+			# the word is appearing twice in the same song...
+			posit_index[word].append(posit_counter)
+		# if the word is not in the positional index yet
+		else:
+			posit_index[word] = [posit_counter]
+		posit_counter += 1
 	return posit_index
 
-lyrics = open("bracket_test.txt", 'r')
-lyrics_text = lyrics.read()
-lyrics.close()
+def lazyTests():
+	lyrics = open("bracket_test.txt", 'r')
+	lyrics_text = lyrics.read()
+	lyrics.close()
 
-toked = createDocwordList([lyrics_text], getStopwords())
-print createPositionalIndex(toked)
+	toked = createDocwordList([lyrics_text], getStopwords())
+	print createPositionalIndex(toked[0], "420blazeit")
+
+lazyTests()
