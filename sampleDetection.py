@@ -46,8 +46,4 @@ def getLists(query, positIndex):
 
 getLists(formatted_query, positIndex)
 
-# straight_locations = positIndex[formatted_query[0]]
-# up_locations = positIndex[formatted_query[1]]
-# getCombinedLists(formatted_query, positIndex)
-
 
