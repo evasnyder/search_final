@@ -45,6 +45,7 @@ def artist_search(search_query, number_results = ''):
 
 # should be passed a list of lyric page urls
 def lyric_handler(url_list):
+    song_list = list()
     for json in url_list:
         url = json['url']
         page = requests.get(url)
@@ -55,27 +56,31 @@ def lyric_handler(url_list):
         song_title = soup.find('span', class_='text_title').text.strip()
 
         new_song = Song(song_title, artist, lyrics, url)
+        song_list.append(new_song)
+    if len(song_list) > 0:
+        return song_list
+    else:
+        return None
+
 
 
 # runner function for file; pass a base artist ID and the bounds artist ID
 def scrap_lyrics_by_artist(base, top_bound = None):
+    artist_list = list()
     if top_bound != None:
         for i in range(base, top_bound):
             artist_test = artist_search(i, 2000)
             if artist_test["meta"]["status"] != 404:
-                copy2('lyrics.json', 'backups')
-                lyric_handler(artist_test["response"]["songs"])
+                artist_list.append(lyric_handler(artist_test["response"]["songs"]))
     else:
         artist_test = artist_search(base, 2000)
         if artist_test["meta"]["status"] != 404:
-            copy2('lyrics.json', 'backups')
-            lyric_handler(artist_test["response"]["songs"])
+            artist_list.append(lyric_handler(artist_test["response"]["songs"]))
+    if len(artist_list):
+        return artist_list
+    else:
+        None
 
-
-
-#my_stopwords = remove_stopwords()
-#last run: artist_id 5 thru 6, need a re-run
-#scrap_lyrics_by_artist(55, 60)
 
 print("--- %s seconds ---" % (time.time() - start_time))
 print str(artists_imported_count) + ' artists imported'

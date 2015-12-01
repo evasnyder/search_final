@@ -8,24 +8,27 @@ import itertools
 
 
 punct = re.compile(r'[\s{}]+'.format(re.escape(string.punctuation)))
-k = 2
+bracket_regex = re.compile('\[.*\]')
 
 # Split up each document by line break and remove any access white spaces
-def tokenizeFile(file_name):
-	lyrics = open(file_name, 'r')
-	lyrics_text = lyrics.read()
-	lyrics.close()
+def tokenizeText(lyrics_text):
 
-	sentences_lyrics = lyrics_text.split('\n')
- 	# sentences_lyrics.remove('')
-	return sentences_lyrics
+	# replace bracketed text with blanks
+	lyrics = re.sub(bracket_regex, '', lyrics_text)
+	# splits text and lowercases
+	lyrics = punct.split(lyrics.lower())
+
+ 	while '' in lyrics:
+		lyrics.remove('')
+	
+	return lyrics
 
 def tokenizeSample(sample):
 	sentences_sample = sample.split('\n')
 	sentences_sample.remove('')
 	return sentences_sample
 
-def get_stopwords(): 
+def getStopwords(): 
 	stopwords_file = open('stopwords.txt', 'r')
 	stopwords = stopwords_file.read()
 	stopwords = stopwords.split('\n')
@@ -33,25 +36,15 @@ def get_stopwords():
 	return stopwords
 
 # Creat the list of document words formatted and split correctly
-def create_docword_list(doc_list, stopwords):
+def createDocwordList(doc_list, stopwords):
 	docword_list = list()
 	# for every document in our collection
 	for doc in doc_list:
-		# lower case everything
-		formatted_doc = punct.split(doc.lower())
-		formatted_doc = [w for w in formatted_doc if w not in stopwords]
-
-		# save the number as the first thing
-		formatted_doc = formatted_doc[1:]
-
-		# remove any extra whitespace
-		if '' in formatted_doc:
-			formatted_doc.remove('')
-		# add the formated document to the final list of document
+		formatted_doc = tokenizeText(doc)
 		docword_list.append(formatted_doc)
 	return docword_list
 
-def create_posit(split_doc):
+def createPositionalIndex(split_doc):
 	posit_index = {} 
 	posit_counter = 0
 	song_counter = 0
@@ -85,7 +78,9 @@ def create_posit(split_doc):
 		song_counter += 1
 	return posit_index
 
-lyrics = tokenizeFile('test_songs.txt')
-my_stopwords = get_stopwords()
-my_docs = create_docword_list(lyrics, my_stopwords)
-create_posit(my_docs)
+lyrics = open("bracket_test.txt", 'r')
+lyrics_text = lyrics.read()
+lyrics.close()
+
+toked = createDocwordList([lyrics_text], getStopwords())
+print createPositionalIndex(toked)
