@@ -20,13 +20,13 @@ class Song:
 
 
 # returns 19 results - seems to always return the same set of poems
-def genius_search(search_query):
+def geniusSearch(search_query):
     search_query = urllib2.quote(search_query)
     response = requests.get("https://api.genius.com/search?q=" + "search_query", headers=headers)
     return response.json()
 
 # should be passed the artist ID we're searching for
-def artist_search(search_query, number_results = ''):
+def artistSearch(search_query, number_results = ''):
 
     if number_results != '':
         number_results = "?per_page=" + str(number_results)
@@ -44,7 +44,7 @@ def artist_search(search_query, number_results = ''):
 
 
 # should be passed a list of lyric page urls
-def lyric_handler(url_list):
+def lyricHandler(url_list):
     song_list = list()
     for json in url_list:
         url = json['url']
@@ -65,17 +65,17 @@ def lyric_handler(url_list):
 
 
 # runner function for file; pass a base artist ID and the bounds artist ID
-def scrap_lyrics_by_artist(base, top_bound = None):
+def scrapeLyricsByArtist(base, top_bound = None):
     artist_list = list()
     if top_bound != None:
         for i in range(base, top_bound):
-            artist_test = artist_search(i, 2000)
+            artist_test = artistSearch(i, 2000)
             if artist_test["meta"]["status"] != 404:
-                artist_list.append(lyric_handler(artist_test["response"]["songs"]))
+                artist_list.append(lyricHandler(artist_test["response"]["songs"]))
     else:
-        artist_test = artist_search(base, 2000)
+        artist_test = artistSearch(base, 2000)
         if artist_test["meta"]["status"] != 404:
-            artist_list.append(lyric_handler(artist_test["response"]["songs"]))
+            artist_list.append(lyricHandler(artist_test["response"]["songs"]))
     if len(artist_list):
         return artist_list
     else:
