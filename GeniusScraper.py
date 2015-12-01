@@ -27,7 +27,7 @@ def geniusSearch(search_query):
 
 # should be passed the artist ID we're searching for
 def artistSearch(search_query, number_results = ''):
-
+    print ("Sanity test: hearders = " + headers["Authorization"])
     if number_results != '':
         number_results = "?per_page=" + str(number_results)
     else:
@@ -82,5 +82,6 @@ def scrapeLyricsByArtist(base, top_bound = None):
         None
 
 
-print("--- %s seconds ---" % (time.time() - start_time))
-print str(artists_imported_count) + ' artists imported'
+#print("--- %s seconds ---" % (time.time() - start_time))
+#print str(artists_imported_count) + ' artists imported
+print artistSearch(1,2000)["meta"]["status"]

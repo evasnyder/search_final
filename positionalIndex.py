@@ -39,7 +39,7 @@ def createDocwordList(doc_list, stopwords):
 		docword_list.append(formatted_doc)
 	return docword_list
 
-def createPositionalIndex(song, song_id):
+def createPositionalIndex(song):
 	posit_index = {}
 	posit_counter = 0
 	
@@ -60,6 +60,6 @@ def lazyTests():
 	lyrics.close()
 
 	toked = createDocwordList([lyrics_text], getStopwords())
-	print createPositionalIndex(toked[0], "420blazeit")
+	print createPositionalIndex(toked[0])
 
-lazyTests()
+#lazyTests()

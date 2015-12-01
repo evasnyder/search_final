@@ -1,4 +1,4 @@
-import sys, tfidf, geniusScraper, dBDelegate, positionalIndex
+import sys, geniusScraper, dBDelegate, positionalIndex
 from datetime import datetime
 
 def main(self):
@@ -11,9 +11,9 @@ def main(self):
 
 #def initialize(self):
 
-def test_main(from, to):
+def test_main(base, cap):
 
-	artist_list = geniusScraper.scrapeLyricsByArtist(1, 2)
+	artist_list = geniusScraper.scrapeLyricsByArtist(base, cap)
 	if artist_list != None:
 			for song_list in artist_list:
 				for song in song_list:
@@ -21,7 +21,9 @@ def test_main(from, to):
 					song_lyrics = positionalIndex.tokenizeText(song.lyrics)
 					song_id = dBDelegate.addSongMetadata(db, song.url, song.artist, song.title)
 
-					song_positional = positionalIndex.createPositionalIndex(song_lyrics, song_id)
+					song_positional = positionalIndex.createPositionalIndex(song_lyrics)
 					dBDelegate.addPositionalIndex(db, song_positional, song_id)
+
+test_main(1,2)
 
 					

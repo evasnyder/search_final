@@ -14,7 +14,7 @@ def addSongMetadata(db, url, artist, title):
 	song_check = db.songs.find({"url": url})
 
 	song_exists_check = db.songs.find_one({"url": url})
-	if len(song_exists_check) == 0:
+	if song_exists_check == None:
 		result = db.songs.insert_one({'url' : url, 'artist' : artist, 'title' : title})
 		return result.inserted_id
 	else:
@@ -37,7 +37,7 @@ def addPositionalIndex(db, positional_index, song_id):
 
 #  Tests should live here
 def lazyTests():
-	songs_db = MongoClient().test
+	songs_db = getDBConnection()
 	addSongMetadata(songs_db, "google.com", "Internet", "Your Privacy (Is A Joke To Us)")
 	addSongMetadata(songs_db, "google.com", "Internet", "Your Privacy (Is A Joke To Us)")
 	cursor = songs_db.songs.find()
