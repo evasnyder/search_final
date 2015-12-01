@@ -1,12 +1,12 @@
-import posititionalIndex, string, re
+import positionalIndex, string, re
 
 
 punct = re.compile(r'[\s{}]+'.format(re.escape(string.punctuation)))
 
-lyrics = posititionalIndex.tokenizeFile('test_songs.txt')
-my_stopwords = posititionalIndex.get_stopwords()
-my_docs = posititionalIndex.create_docword_list(lyrics, my_stopwords)
-posititional_Index = posititionalIndex.create_posit(my_docs)
+lyrics = positionalIndex.tokenizeFile('test_songs.txt')
+my_stopwords = positionalIndex.get_stopwords()
+my_docs = positionalIndex.create_docword_list(lyrics, my_stopwords)
+posititional_Index = positionalIndex.create_posit(my_docs)
 
 query = 'Straight up now'
 
@@ -17,12 +17,12 @@ print formatted_query
 query_word_list = {}
 positional_list = {}
 
+docsToCheck = []
+
 
 def getLists(query, posititional_Index):
 	smallest_value = 9999999999;
 	wordInLeastDocuments = " ";
-
-	docsToCheck = []
 
 	for word in query:
 		print posititional_Index[word]
@@ -51,10 +51,12 @@ def compareLists(query, posititional_Index, docsToCheck):
 
 	for doc in docsToCheck:
 		for word in query:
+			print posititional_Index[word][doc]
 			
 	# compare the lists of positional indexes in the documents that have all of the query words within them 
 
 
 getLists(formatted_query, posititional_Index)
+compareLists(formatted_query, posititional_Index, docsToCheck)
 
 
