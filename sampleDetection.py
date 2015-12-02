@@ -58,13 +58,13 @@ def compareLists(query, positional_Index, docsToCheck):
 
 		# if index 2 and index 2 are in the same position in the document..
 		# this would hopefully never happen
-		if positional_index[word][doc][index_2] - positional_index[word][doc][index_1] = 0: 
+		if positional_index[word][doc][index_2] - positional_index[word][doc][index_1] == 0: 
 			index_2 += 1
 			index_1 += 1
 			print "Index 1 and Index 2 have the same value"
 
 		# if the words come continuous to eachother then we have a match! 
-		else if positional_index[word][doc][index_2] - positional_index[word][doc][index_1] = 1: 
+		else if positional_index[word][doc][index_2] - positional_index[word][doc][index_1] == 1: 
 			# match!
 			# record the match somewhere 
 			# advance both indexes 
