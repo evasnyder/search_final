@@ -5,28 +5,20 @@ positional_lists_for_document ={
 }
 
 
-def detect_sample(current_index, query, document_id):
-	print "*********** NEW DETECT SAMPLE ***********"
-	print "Query: " + str(query)
-	# global positional_lists_for_document
-
-	# [20, 40, 67]
+def detectSample(current_index, query, document_id):
+	# get the current list of positions that you're looking through
 	current_positional_list = positional_index[query[0]][document_id]
-	print "Current Positional List: " + str(current_positional_list)
 
+	# get the next index of the next word to see if it exists and then if it comes right after the current index
 	next_index = current_positional_list.index(current_index+1) if current_index+1 in current_positional_list else None
 
-	print "Next Index: " + str(next_index)
-	print len(query)
-
 	if next_index != None:
+		# if you've looked through the entire query and made it to this point: it samples the query
 		if len(query) == 1:
-			print "we doneeee"
 			return True
 		else:
-			print "We're inside the else!!!"
-			print query[1:]
-			return detect_sample(current_index+1, query[1:], document_id)
+			# else call the detect sample again while looking at the next query index
+			return detectSample(current_index+1, query[1:], document_id)
 	else:
 		return False
 
@@ -43,16 +35,15 @@ def compareLists(query, relevant_positional_index, possible_document_matches):
 	# songs that contain the sample from the query passed by the user
 	sampled_songs = list()
 
-	# Tokenize query
+	# Searching through all of the documents with every word in the query to see if the words come one after another
 	for document in possible_document_matches:
-			print "Document: " + str(document)
 			# word: 1{20, 40, 67} ==== gives you [20, 40, 67]
 			for position in positional_index[query[0]][document]:
-				print "Position we're checking: " + str(position)
-				song_contains_query = detect_sample(position, query[1:], document)
-				print "Song contains query: " + str(song_contains_query)
+				# calling a recursive method to see if the song actually contains the query
+				song_contains_query = detectSample(position, query[1:], document)
+
+				# if the song does contain the query, add the document name to a list
 				if song_contains_query:
-					print "song contains the query"
 					sampled_songs.append(document)
 
 	return sampled_songs
