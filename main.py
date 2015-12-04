@@ -24,6 +24,4 @@ def test_main(base, cap):
 					song_positional = positionalIndex.createPositionalIndex(song_lyrics)
 					dBDelegate.addPositionalIndex(db, song_positional, song_id)
 
-test_main(1,2)
-
-					
+test_main(1,2)					

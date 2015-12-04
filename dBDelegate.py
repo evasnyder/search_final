@@ -26,7 +26,7 @@ def addSongMetadata(db, url, artist, title):
 #  inserts the positional data for that word from the doc calling the method with the song id as a key.
 def addPositionalIndex(db, positional_index, song_id):
 
-	song_key = "document_dict." + song_id
+	song_key = "document_dict." + str(song_id)
 
 	for word, positions in positional_index.iteritems():
 		
