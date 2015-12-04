@@ -1,40 +1,20 @@
-<<<<<<< Updated upstream
+
 positional_lists_for_document ={
 	"pizzas" : { "doc1" : [1,2,3,4,5,6,7,8], "doc2": [3,6,8,9,10,15], "doc3": [4,5,8,12,66], "doc4": [1,2,3,4,10]},
 	"are": {"doc1" : [9,27,88,100], "doc2": [4,5,11,18], "doc4": [5, 11]},
 	"dope": {"doc1" : [10], "doc3": [6, 11, 13, 68], "doc4": [6]}
 }
-=======
-positional_lists_for_document ={"pizzas" : { "doc1" : [1,2,3,4,5,6,7,8]}, "are": {"doc1" : [9,27,88,100]},"dope": {"doc1" : [10]}}
->>>>>>> Stashed changes
 
-
-<<<<<<< Updated upstream
-def detectSample(current_index, query, document_id):
-	# get the current list of positions that you're looking through
-	current_positional_list = positional_index[query[0]][document_id]
-=======
 def detect_sample(current_index, query, document_id):
 	# global positional_lists_for_document
 
 	# [20, 40, 67]
 	current_positional_list = positional_index[query[0]][document_id]
-<<<<<<< Updated upstream
-	print "Current Positional List: " + str(current_positional_list)
->>>>>>> Stashed changes
+
 
 	# get the next index of the next word to see if it exists and then if it comes right after the current index
 	next_index = current_positional_list.index(current_index+1) if current_index+1 in current_positional_list else None
 
-<<<<<<< Updated upstream
-=======
-	print "Next Index: " + str(next_index)
-	print len(query)
-=======
-	next_index = current_positional_list.index(current_index+1) if current_index+1 in current_positional_list else None
->>>>>>> Stashed changes
-
->>>>>>> Stashed changes
 	if next_index != None:
 		# if you've looked through the entire query and made it to this point: it samples the query
 		if len(query) == 1:
