@@ -38,9 +38,9 @@ def addPositionalIndex(db, positional_index, song_id):
 #  Tests should live here
 def lazyTests():
 	songs_db = getDBConnection()
-	addSongMetadata(songs_db, "google.com", "Internet", "Your Privacy (Is A Joke To Us)")
-	addSongMetadata(songs_db, "google.com", "Internet", "Your Privacy (Is A Joke To Us)")
-	cursor = songs_db.songs.find()
+	#addSongMetadata(songs_db, "google.com", "Internet", "Your Privacy (Is A Joke To Us)")
+	#addSongMetadata(songs_db, "google.com", "Internet", "Your Privacy (Is A Joke To Us)")
+	cursor = songs_db.word_index.find()
 
 	for doc in cursor:
 		print doc
