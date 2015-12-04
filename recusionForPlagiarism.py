@@ -5,7 +5,7 @@ positional_lists_for_document ={
 	"dope": {"doc1" : [10], "doc3": [6, 11, 13, 68], "doc4": [6]}
 }
 
-def detect_sample(current_index, query, document_id):
+def detectSample(current_index, query, document_id):
 	# global positional_lists_for_document
 
 	# [20, 40, 67] hello
