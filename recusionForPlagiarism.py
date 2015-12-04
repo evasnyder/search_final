@@ -8,7 +8,7 @@ positional_lists_for_document ={
 def detect_sample(current_index, query, document_id):
 	# global positional_lists_for_document
 
-	# [20, 40, 67]
+	# [20, 40, 67] hello
 	current_positional_list = positional_index[query[0]][document_id]
 
 
