@@ -1,4 +1,8 @@
-positional_lists_for_document ={"pizzas" : { "doc1" : [1,2,3,4,5,6,7,8], "doc2": [3,6,8,9,10,15], "doc3": [4,5,8,12,66]}, "are": {"doc1" : [9,27,88,100], "doc2": [4,5,11,18]},"dope": {"doc1" : [10], "doc3": [6, 11, 13, 68]}}
+positional_lists_for_document ={
+	"pizzas" : { "doc1" : [1,2,3,4,5,6,7,8], "doc2": [3,6,8,9,10,15], "doc3": [4,5,8,12,66]},
+	"are": {"doc1" : [9,27,88,100], "doc2": [4,5,11,18]},
+	"dope": {"doc1" : [10], "doc3": [6, 11, 13, 68]}
+}
 
 
 def detect_sample(current_index, query, document_id):
