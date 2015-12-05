@@ -1,9 +1,36 @@
+import dBDelegate
+from bson.objectid import ObjectId
 
 positional_lists_for_document ={
 	"pizzas" : { "doc1" : [1,2,3,4,5,6,7,8], "doc2": [3,6,8,9,10,15], "doc3": [4,5,8,12,66], "doc4": [1,2,3,4,10]},
 	"are": {"doc1" : [9,27,88,100], "doc2": [4,5,11,18], "doc4": [5, 11]},
 	"dope": {"doc1" : [10], "doc3": [6, 11, 13, 68], "doc4": [6]}
 }
+
+def getIntersectingPositionalIndex(db, query):
+	intersected_positional_list = dict()
+	previous_word = ''
+	for word in query:
+		intersected_positional_list[word] = {}
+		positional_list = dBDelegate.getPositionalIndexForWord(word)
+
+
+		if len(intersected_positional_list) > 1:
+			common_docs = set(intersected_positional_list[previous_word].keys()).intersection(positional_list.keys())
+			removals = set(intersected_positional_list[previous_word].keys()).difference(positional_list.keys())
+
+			for document in common_docs:
+				intersected_positional_list[word][document] = positional_list[document]
+			for removal in removals:
+				for word_key in intersected_positional_list:
+					if removal in intersected_positional_list[word_key]:
+						del intersected_positional_list[word_key][removal]
+		else:
+			intersected_positional_list[word] = positional_list
+
+		previous_word = word
+	return intersected_positional_list[query[0]].keys()
+	# return intersected_positional_list
 
 def detectSample(current_index, query, document_id):
 	# global positional_lists_for_document
@@ -40,7 +67,7 @@ def compareLists(query, relevant_positional_index, possible_document_matches):
 
 	# Searching through all of the documents with every word in the query to see if the words come one after another
 	for document in possible_document_matches:
-			# word: 1{20, 40, 67} ==== gives you [20, 40, 67]
+			# word: 1{20, 40, 67} == gives you [20, 40, 67]
 			for position in positional_index[query[0]][document]:
 				# calling a recursive method to see if the song actually contains the query
 				song_contains_query = detectSample(position, query[1:], document)
@@ -51,4 +78,13 @@ def compareLists(query, relevant_positional_index, possible_document_matches):
 
 	return sampled_songs
 
-print compareLists(["pizzas", "are", "dope"], positional_lists_for_document, ["doc1", "doc4"])
+# print compareLists(["pizzas", "are", "dope"], positional_lists_for_document, ["doc1", "doc4"])
+db = dBDelegate.getDBConnection()
+test = getIntersectingPositionalIndex(db, ["what", "you", "eat", "don", "t", "make", "me", "shit"])
+# test = getIntersectingPositionalIndex(db, ["first", "the", "fat", "boys", "break", "up"])
+for t in test:
+	print dBDelegate.getSongURL(db, t)
+# for doc in test["me"]:
+# 	print dBDelegate.getSongID(db, ObjectId(doc))
+
+ #print compareLists(["what", "you", "eat", "don", "t", "make", "me", "shit"])

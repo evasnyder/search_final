@@ -24,4 +24,18 @@ def test_main(base, cap):
 					song_positional = positionalIndex.createPositionalIndex(song_lyrics)
 					dBDelegate.addPositionalIndex(db, song_positional, song_id)
 
-test_main(1,2)					
+def addTestLyrics(urls):
+	db = dBDelegate.getDBConnection()
+
+	for url in urls:
+		song = geniusScraper.scrapeSongByURL(url)
+
+		song_lyrics = positionalIndex.tokenizeText(song.lyrics)
+		song_id = dBDelegate.addSongMetadata(db, song.url, song.artist, song.title)
+
+		song_positional = positionalIndex.createPositionalIndex(song_lyrics)
+		dBDelegate.addPositionalIndex(db, song_positional, song_id)
+
+
+#test_main(1,2)
+addTestLyrics(["http://genius.com/Jay-z-heart-of-the-city-aint-no-love-lyrics", "http://genius.com/J-cole-forbidden-fruit-lyrics"])

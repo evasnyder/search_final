@@ -35,7 +35,7 @@ def artistSearch(search_query, number_results = ''):
 
     if isinstance(search_query, int):
         request_url = "https://api.genius.com/artists/" + str(search_query) + "/songs" + number_results
-        print request_url
+        #   print request_url
         response = requests.get(request_url, headers=headers)
     else:
         return "Check input; int not passed for query"
@@ -73,7 +73,7 @@ def scrapeLyricsByArtist(base, top_bound = None):
             if artist_test["meta"]["status"] != 404:
                 artist_list.append(lyricHandler(artist_test["response"]["songs"]))
     else:
-        artist_test = artistSearch(base, 2000)
+        artist_test = artistSearch(base, 4)
         if artist_test["meta"]["status"] != 404:
             artist_list.append(lyricHandler(artist_test["response"]["songs"]))
     if len(artist_list):
@@ -81,7 +81,14 @@ def scrapeLyricsByArtist(base, top_bound = None):
     else:
         None
 
+def scrapeSongByURL(url):
+    page = requests.get(url)
 
-#print("--- %s seconds ---" % (time.time() - start_time))
-#print str(artists_imported_count) + ' artists imported
-print artistSearch(1,2000)["meta"]["status"]
+    soup = BeautifulSoup(page.text, "lxml")
+
+    artist = soup.find('span', class_='text_artist').text.strip()
+    lyrics = soup.find('div', class_='lyrics').text.strip()
+    song_title = soup.find('span', class_='text_title').text.strip()
+
+    return Song(song_title, artist, lyrics, url)
+

@@ -18,6 +18,8 @@ def tokenizeText(lyrics_text):
 	# splits text and lowercases
 	lyrics = punct.split(lyrics.lower())
 
+	#lyrics = [w for w in lyrics if w not in getStopwords()]
+
  	while '' in lyrics:
 		lyrics.remove('')
 	
@@ -67,3 +69,5 @@ def lazyTests():
 	toked = createDocwordList([lyrics_text], getStopwords())
 	print createPositionalIndex(toked[0])
 #lazyTests()
+
+print tokenizeText("I love my mom and I love my dad")
