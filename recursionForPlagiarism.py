@@ -92,24 +92,20 @@ def createPositionalIndex(db, query):
 	print relevant_positional_index
 	return relevant_positional_index
 
-
-
-
+def createRelevantPositionalIndex(word):
 db = dBDelegate.getDBConnection()
 query = ["what", "you", "eat", "don", "t", "make", "me", "shit"]
 
 relevant_positional_index = createPositionalIndex(db, query)
 
 test = getIntersectingPositionalIndex(db, ["what", "you", "eat", "don", "t", "make", "me", "shit"])
+
 for t in test:
 	print dBDelegate.getSongURL(db, t)
 
 compareLists(query, relevant_positional_index, test)
 
 
-
-
-
-
-
+for t in test:
+	print dBDelegate.getSongURL(db, t)
 

@@ -1,8 +1,6 @@
 import requests, urllib2, time, string, re, pymongo
 from bs4 import BeautifulSoup
-from shutil import copy2
 from time import clock
-from os import makedirs
 
 start_time = time.time()
 artists_imported_count = 0
