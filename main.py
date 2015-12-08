@@ -15,14 +15,14 @@ def test_main(base, cap):
 
 	artist_list = geniusScraper.scrapeLyricsByArtist(base, cap)
 	if artist_list != None:
-			for song_list in artist_list:
-				for song in song_list:
-					db = dBDelegate.getDBConnection()
-					song_lyrics = positionalIndex.tokenizeText(song.lyrics)
-					song_id = dBDelegate.addSongMetadata(db, song.url, song.artist, song.title)
+		for song_list in artist_list:
+			for song in song_list:
+				db = dBDelegate.getDBConnection()
+				song_lyrics = positionalIndex.tokenizeText(song.lyrics)
+				song_id = dBDelegate.addSongMetadata(db, song.url, song.artist, song.title)
 
-					song_positional = positionalIndex.createPositionalIndex(song_lyrics)
-					dBDelegate.addPositionalIndex(db, song_positional, song_id)
+				song_positional = positionalIndex.createPositionalIndex(song_lyrics)
+				dBDelegate.addPositionalIndex(db, song_positional, song_id)
 
 def addTestLyrics(urls):
 	db = dBDelegate.getDBConnection()
@@ -37,5 +37,5 @@ def addTestLyrics(urls):
 		dBDelegate.addPositionalIndex(db, song_positional, song_id)
 
 
-#test_main(1,2)
+# test_main(1,2)
 addTestLyrics(["http://genius.com/Jay-z-heart-of-the-city-aint-no-love-lyrics", "http://genius.com/J-cole-forbidden-fruit-lyrics"])
