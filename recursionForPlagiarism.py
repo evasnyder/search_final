@@ -36,7 +36,7 @@ def detectSample(current_index, query, document_id):
 	# global positional_lists_for_document
 
 	# [20, 40, 67] hello
-	current_positional_list = positional_index[query[0]][document_id]
+	current_positional_list = positional_index[query[0]]['document_dict'][document_id]
 
 
 	# get the next index of the next word to see if it exists and then if it comes right after the current index
@@ -68,23 +68,45 @@ def compareLists(query, relevant_positional_index, possible_document_matches):
 	# Searching through all of the documents with every word in the query to see if the words come one after another
 	for document in possible_document_matches:
 			# word: 1{20, 40, 67} == gives you [20, 40, 67]
-			for position in positional_index[query[0]][document]:
+			print positional_index[query[0]]
+			for position in positional_index[query[0]]['document_dict'][document]:
 				# calling a recursive method to see if the song actually contains the query
 				song_contains_query = detectSample(position, query[1:], document)
 
 				# if the song does contain the query, add the document name to a list
 				if song_contains_query:
 					sampled_songs.append(document)
-
+	print sampled_songs				
 	return sampled_songs
 
-# print compareLists(["pizzas", "are", "dope"], positional_lists_for_document, ["doc1", "doc4"])
+def createPositionalIndex(db, query):
+	# take away duplicates
+	query = set(query)
+	relevant_positional_index = {}
+	for word in query:
+		relevant_positional_index[word] = db.word_index.find_one({"word": word})
+
+	print relevant_positional_index
+	return relevant_positional_index
+
+
+
+
 db = dBDelegate.getDBConnection()
+query = ["what", "you", "eat", "don", "t", "make", "me", "shit"]
+
+relevant_positional_index = createPositionalIndex(db, query)
+
 test = getIntersectingPositionalIndex(db, ["what", "you", "eat", "don", "t", "make", "me", "shit"])
-# test = getIntersectingPositionalIndex(db, ["first", "the", "fat", "boys", "break", "up"])
 for t in test:
 	print dBDelegate.getSongURL(db, t)
-# for doc in test["me"]:
-# 	print dBDelegate.getSongID(db, ObjectId(doc))
 
- #print compareLists(["what", "you", "eat", "don", "t", "make", "me", "shit"])
+compareLists(query, relevant_positional_index, test)
+
+
+
+
+
+
+
+
