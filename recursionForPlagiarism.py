@@ -76,6 +76,9 @@ def compareLists(query, relevant_positional_index, possible_document_matches):
 				# if the song does contain the query, add the document name to a list
 				if song_contains_query:
 					sampled_songs.append(document)
+
+	for t in sampled_songs:
+		print dBDelegate.getSongURL(db, t)
 	print sampled_songs				
 	return sampled_songs
 
