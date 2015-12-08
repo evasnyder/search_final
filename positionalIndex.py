@@ -25,6 +25,13 @@ def tokenizeText(lyrics_text):
 	
 	return lyrics
 
+# Split up each document by line break and remove any access white spaces
+def tokenizeLyrics(lyrics_text):
+
+	# replace bracketed text with blanks
+	lyrics = re.sub(bracket_regex, '', lyrics_text)
+	return lyrics.lower()
+
 def getStopwords(): 
 	stopwords_file = open('stopwords.txt', 'r')
 	stopwords = stopwords_file.read()

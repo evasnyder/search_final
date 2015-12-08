@@ -1,6 +1,5 @@
 from __future__ import division
 import re, string, math, random
-from porter2 import stem
 
 import crawler
 
@@ -33,7 +32,7 @@ def remove_stopwords():
 # create a list of query term frequencies per word
 def create_querytf_list(query_list, stopwords):
 	querytf_list = list()
-	# for query in query_list:
+	for query in query_list:
 		# lowercase every query word
 		formatted_query = punct.split(query.lower())
 		formatted_query = [w for w in formatted_query if w not in stopwords]
@@ -49,10 +48,10 @@ def create_querytf_list(query_list, stopwords):
 		if '' in unique_words:
 			unique_words.remove('')
 		#generate tf counts for each unique word in query
-		for unique_word in unique_words:
+			for unique_word in unique_words:
 			# if the query we're looking out has the unique word, calculate the number of times it appears
-			querytf_dict[unique_word] = formatted_query.count(unique_word)
-		querytf_list.append(querytf_dict)
+				querytf_dict[unique_word] = formatted_query.count(unique_word)
+				querytf_list.append(querytf_dict)
 	return querytf_list
 
 # Creat the list of document words formatted and split correctly
@@ -99,31 +98,37 @@ def get_avg_doclength(documents, collection_length):
 
 def output_similarities(documents, querytf_list, documenttf, collection_length, avg_doclength):
 	f = open('best.top', 'w')
+	print "doin shit"
 	# for every query in the list of query term frequencies
 	for query_index, query in enumerate(querytf_list):
+		print "for query"
 		# for every document 
 		for doc_index, doc in enumerate(documents):
+			print "for doc"
 			similarity = 0
 			# for the word in the query frequency list 
 			for query_word, querytf in query.items():
+				print"shit shit shit"
 				# raw term freq. is the number of times the word is in the document you're looking at
 				raw_tf = doc.count(query_word)
 				# if the query word is in the collection and it is in the document we're looking at
 				if (query_word in documenttf) and (raw_tf > 0):
+					print "should be calculating"
 					# calculate the tfidf score for it 
 					similarity += (querytf * (raw_tf)/(raw_tf + (k * len(doc)/avg_doclength))) * math.log10(collection_length/documenttf[query_word])
+					print similarity
 			# write to the file
 			f.write(str(query_index + 1) + ' 0 ' + str(doc_index + 1) + ' 0 ' + str(similarity) + ' 0\n')
 	f.close()
 
 
-my_queries = tokenize('qrys.txt')
-my_documents = tokenizeFile('lyrics.txt')
-my_stopwords = remove_stopwords()
-my_docs = create_docword_list(my_documents, my_stopwords)
-my_documenttf = create_documenttf_dict(my_docs)
-my_querytf = create_querytf_list(my_queries, my_stopwords)
-my_collection_length = len(my_docs)
-my_avg_doclength = get_avg_doclength(my_docs, my_collection_length)
+# my_queries = tokenize('qrys.txt')
+# my_documents = tokenizeFile('lyrics.txt')
+# my_stopwords = remove_stopwords()
+# my_docs = create_docword_list(my_documents, my_stopwords)
+# my_documenttf = create_documenttf_dict(my_docs)
+# my_querytf = create_querytf_list(my_queries, my_stopwords)
+# my_collection_length = len(my_docs)
+# my_avg_doclength = get_avg_doclength(my_docs, my_collection_length)
 
-output_similarities(my_docs, my_querytf, my_documenttf, my_collection_length, my_avg_doclength)
+# output_similarities(my_docs, my_querytf, my_documenttf, my_collection_length, my_avg_doclength)

@@ -1,5 +1,6 @@
-import dBDelegate
+import dBDelegate, tfidf
 from bson.objectid import ObjectId
+from collections import Counter
 
 positional_lists_for_document ={
 	"pizzas" : { "doc1" : [1,2,3,4,5,6,7,8], "doc2": [3,6,8,9,10,15], "doc3": [4,5,8,12,66], "doc4": [1,2,3,4,10]},
@@ -68,7 +69,7 @@ def compareLists(query, relevant_positional_index, possible_document_matches):
 	# Searching through all of the documents with every word in the query to see if the words come one after another
 	for document in possible_document_matches:
 			# word: 1{20, 40, 67} == gives you [20, 40, 67]
-			print positional_index[query[0]]
+			# print positional_index[query[0]]
 			for position in positional_index[query[0]]['document_dict'][document]:
 				# calling a recursive method to see if the song actually contains the query
 				song_contains_query = detectSample(position, query[1:], document)
@@ -79,7 +80,7 @@ def compareLists(query, relevant_positional_index, possible_document_matches):
 
 	for t in sampled_songs:
 		print dBDelegate.getSongURL(db, t)
-	print sampled_songs				
+	# print sampled_songs				
 	return sampled_songs
 
 def createPositionalIndex(db, query):
@@ -89,7 +90,7 @@ def createPositionalIndex(db, query):
 	for word in query:
 		relevant_positional_index[word] = db.word_index.find_one({"word": word})
 
-	print relevant_positional_index
+	# print relevant_positional_index
 	return relevant_positional_index
 
 def createPositionalIndex(db, query):
@@ -99,7 +100,7 @@ def createPositionalIndex(db, query):
 	for word in query:
 		relevant_positional_index[word] = db.word_index.find_one({"word": word})
 
-	print relevant_positional_index
+	# print relevant_positional_index
 	return relevant_positional_index
 	
 db = dBDelegate.getDBConnection()
@@ -109,9 +110,46 @@ relevant_positional_index = createPositionalIndex(db, query)
 
 test = getIntersectingPositionalIndex(db, ["what", "you", "eat", "don", "t", "make", "me", "shit"])
 
-for t in test:
-	print dBDelegate.getSongURL(db, t)
+# for t in test:
+	# print dBDelegate.getSongURL(db, t)
 
 compareLists(query, relevant_positional_index, test)
+
+
+
+# *********************************************************************** 
+
+all_docs = find('_id' is test)
+
+# looping through every song that contains every word in the query
+for i in range(0:len(test)):
+	for n in range(i:len(test)):
+		# compare
+
+
+
+
+
+
+
+
+
+total_song_length = 0
+for document in test:
+	song = db.songs.find_one({"_id":ObjectId(document)})
+	lyrics = song["lyrics"]
+	print len(lyrics)
+	print Counter(lyrics.split())
+	# total_song_length += Counter(lyrics.split())
+	# print total_song_length
+
+averageLength = total_song_length / len(test)
+print averageLength
+	# print lyrics
+
+	# tfidf.output_similarities(my_docs, my_querytf, my_documenttf, my_collection_length, my_avg_doclength)
+
+
+
 
 

@@ -10,12 +10,12 @@ def getDBConnection():
 #  Takes a database, a song url, a song artist, and a song title 
 #  from our crawler or serialized data and attempts a MongoDB insertion.
 #  Returns an ID for the song insert (attempt).
-def addSongMetadata(db, url, artist, title):
+def addSongMetadata(db, url, artist, title, lyrics):
 	song_check = db.songs.find({"url": url})
 
 	song_exists_check = db.songs.find_one({"url": url})
 	if song_exists_check == None:
-		result = db.songs.insert_one({'url' : url, 'artist' : artist, 'title' : title})
+		result = db.songs.insert_one({'url' : url, 'artist' : artist, 'title' : title, 'lyrics' : lyrics})
 		return result.inserted_id
 	else:
 		# print "Song with url " + url + " already exists"
