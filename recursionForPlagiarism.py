@@ -8,6 +8,8 @@ positional_lists_for_document ={
 	"dope": {"doc1" : [10], "doc3": [6, 11, 13, 68], "doc4": [6]}
 }
 
+appropriate_punctuation = '!"#$%&()*+,./:;<=>?@[\\]^_`{|}~'
+
 def getIntersectingPositionalIndex(db, query):
 	intersected_positional_list = dict()
 	previous_word = ''
