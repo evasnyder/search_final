@@ -8,7 +8,7 @@ positional_lists_for_document ={
 	"dope": {"doc1" : [10], "doc3": [6, 11, 13, 68], "doc4": [6]}
 }
 
-appropriate_punctuation = '!"#$%&()*+,./:;<=>?@[\\]^_`{|}~'
+# appropriate_punctuation = '!"#$%&()*+,./:;<=>?@[\\]^_`{|}~'
 
 def getIntersectingPositionalIndex(db, query):
 	intersected_positional_list = dict()
@@ -117,50 +117,15 @@ songs_that_contain_all_query_words = getIntersectingPositionalIndex(db, ["what",
 
 compareLists(query, relevant_positional_index, songs_that_contain_all_query_words)
 
+my_stopwords = tfidf.remove_stopwords()
+my_songs = tfidf.create_song_list(songs_that_contain_all_query_words, my_stopwords)
+my_songtf = tfidf.create_songtf_dict(my_songs)
+my_querytf = tfidf.create_querytf_list(query, my_stopwords)
+my_collection_length = len(my_songs)
+my_avg_songlength = tfidf.get_avg_songlength(my_songs)
 
+tfidf.output_similarities(my_songs, my_querytf, my_songtf, my_collection_length, my_avg_songlength)
 
-# *********************************************************************** 
-
-print songs_that_contain_all_query_words
-
-
-def getAverageLength(songs_that_contain_all_query_words):
-	punct = re.compile(r'[\s{}]+'.format(re.escape(string.punctuation)))
-	sum_lyrics = 0
-	for objectid in songs_that_contain_all_query_words:
-		song = db.songs.find_one({"_id":ObjectId(objectid)})
-		lyrics = song["lyrics"]
-
-		lyrics = punct.split(lyrics.lower())
-		print lyrics
-
-		sum_lyrics += len(lyrics)
-		print sum_lyrics
-
-	print sum_lyrics/len(songs_that_contain_all_query_words)
-
-
-getAverageLength(songs_that_contain_all_query_words)
-
-
-
-
-
-
-# total_song_length = 0
-# for document in songs_that_contain_all_query_words:
-# 	song = db.songs.find_one({"_id":ObjectId(document)})
-# 	lyrics = song["lyrics"]
-# 	print len(lyrics)
-# 	print Counter(lyrics.split())
-# 	# total_song_length += Counter(lyrics.split())
-# 	# print total_song_length
-
-# averageLength = total_song_length / len(songs_that_contain_all_query_words)
-# print averageLength
-	# print lyrics
-
-	# tfidf.output_similarities(my_docs, my_querytf, my_documenttf, my_collection_length, my_avg_doclength)
 
 
 

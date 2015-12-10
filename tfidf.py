@@ -1,26 +1,15 @@
 from __future__ import division
 import re, string, math, random
+import dBDelegate
+from bson.objectid import ObjectId
+from collections import Counter
 
 import crawler
 
-
-punct = re.compile(r'[\s{}]+'.format(re.escape(string.punctuation)))
+appropriate_punctuation = '!"#$%&()*+,./:;<=>?@[\\]^_`{|}~'
+punct = re.compile(r'[\s{}]+'.format(re.escape(appropriate_punctuation)))
 k = 2
-
-# Split up each document by line break and remove any access white spaces
-def tokenizeFile(file_name):
-	lyrics = open(file_name, 'r')
-	lyrics_text = lyrics.read()
-	lyrics.close()
-
-	sentences_lyrics = lyrics_text.split('\n')
-	sentences_lyrics.remove('')
-	return sentences_lyrics
-
-def tokenizeSample(sample):
-	sentences_sample = sample.split('\n')
-	sentences_sample.remove('')
-	return sentences_sample
+db = dBDelegate.getDBConnection()
 
 def remove_stopwords(): 
 	stopwords_file = open('stopwords.txt', 'r')
@@ -30,105 +19,79 @@ def remove_stopwords():
 	return stopwords
 
 # create a list of query term frequencies per word
-def create_querytf_list(query_list, stopwords):
+# presumes it's already tokenized
+def create_querytf_list(tokenized_query, stopwords):
 	querytf_list = list()
-	for query in query_list:
-		# lowercase every query word
-		formatted_query = punct.split(query.lower())
-		formatted_query = [w for w in formatted_query if w not in stopwords]
+	querytf_dict = dict()
+	# create a list of unique query words
+	unique_words = set(tokenized_query)
+	#remove whitespace
+	if '' in unique_words:
+		unique_words.remove('')
+	#generate tf counts for each unique word in query
+	for unique_word in unique_words:
+	# if the query we're looking out has the unique word, calculate the number of times it appears
+		querytf_dict[unique_word] = tokenized_query.count(unique_word)
+		querytf_list.append(querytf_dict)
 
-		# formatted_query = [stem(w) for w in formatted_query]
-
-		# truncate number from query
-		formatted_query = formatted_query[1:]
-		querytf_dict = dict()
-		# create a list of unique query words
-		unique_words = set(formatted_query)
-		#remove whitespace
-		if '' in unique_words:
-			unique_words.remove('')
-		#generate tf counts for each unique word in query
-			for unique_word in unique_words:
-			# if the query we're looking out has the unique word, calculate the number of times it appears
-				querytf_dict[unique_word] = formatted_query.count(unique_word)
-				querytf_list.append(querytf_dict)
 	return querytf_list
 
 # Creat the list of document words formatted and split correctly
-def create_docword_list(doc_list, stopwords):
-	docword_list = list()
-	# for every document in our collection
-	for doc in doc_list:
-		# lower case everything
-		formatted_doc = punct.split(doc.lower())
-		formatted_doc = [w for w in formatted_doc if w not in stopwords]
-		
-		# formatted_doc = [stem(w) for w in formatted_doc]
+def create_song_list(songs, stopwords):
+	song_list = list()
 
-		# save the number as the first thing
-		formatted_doc = formatted_doc[1:]
+	for objectid in songs:
+		song = db.songs.find_one({"_id":ObjectId(objectid)})
+		lyrics = song["lyrics"]
+		lyrics = punct.split(lyrics.lower())
+		#  lyrics = [w for w in lyrics if w not in stopwords]
 
 		# remove any extra whitespace
-		if '' in formatted_doc:
-			formatted_doc.remove('')
+		if '' in lyrics:
+			lyrics.remove('')
 		# add the formated document to the final list of document
-		docword_list.append(formatted_doc)
-	return docword_list
+		song_list.append(lyrics)
+	return song_list
 
 # create a list of document words with the frequency of each word 
-def create_documenttf_dict(doc_list):
-	doctf_dict = dict()
-	for doc in doc_list:
+def create_songtf_dict(song_list):
+	songtf_dict = dict()
+	for song in song_list:
 		# for each unique word
-		for word in set(doc):
+		for word in set(song):
 			# if we've already seen that word in the document, increment the counter
-			if word in doctf_dict:
-				doctf_dict[word] += 1
+			if word in songtf_dict:
+				songtf_dict[word] += 1
 			# else add it to the dict. and set it equal to 1
 			else:
-				doctf_dict[word] = 1
-	return doctf_dict
+				songtf_dict[word] = 1
+	return songtf_dict
 
 # get the everage document length for our collection
-def get_avg_doclength(documents, collection_length):
-	sum = 0
-	for doc in documents:
-		sum += len(doc)
-	return (sum/collection_length)
+def get_avg_songlength(song_list):
+	sum_lyrics = 0
+	for song in song_list:
+		sum_lyrics += len(song)
 
-def output_similarities(documents, querytf_list, documenttf, collection_length, avg_doclength):
-	f = open('best.top', 'w')
-	print "doin shit"
+	print sum_lyrics/len(song_list)
+	return sum_lyrics/len(song_list)
+
+
+def output_similarities(song_list, querytf_list, songtf, collection_length, avg_songlength):
+	f = open('tfidf_samples.txt', 'w')
 	# for every query in the list of query term frequencies
 	for query_index, query in enumerate(querytf_list):
-		print "for query"
 		# for every document 
-		for doc_index, doc in enumerate(documents):
-			print "for doc"
+		for song_index, song in enumerate(song_list):
 			similarity = 0
 			# for the word in the query frequency list 
 			for query_word, querytf in query.items():
-				print"shit shit shit"
 				# raw term freq. is the number of times the word is in the document you're looking at
-				raw_tf = doc.count(query_word)
+				raw_tf = song.count(query_word)
 				# if the query word is in the collection and it is in the document we're looking at
-				if (query_word in documenttf) and (raw_tf > 0):
-					print "should be calculating"
+				if (query_word in songtf) and (raw_tf > 0):
 					# calculate the tfidf score for it 
-					similarity += (querytf * (raw_tf)/(raw_tf + (k * len(doc)/avg_doclength))) * math.log10(collection_length/documenttf[query_word])
-					print similarity
+					similarity += (querytf * (raw_tf)/(raw_tf + (k * len(song)/avg_songlength))) * math.log10(collection_length/songtf[query_word])
 			# write to the file
-			f.write(str(query_index + 1) + ' 0 ' + str(doc_index + 1) + ' 0 ' + str(similarity) + ' 0\n')
+			f.write(str(query_index + 1) + ' 0 ' + str(song_index + 1) + ' 0 ' + str(similarity) + ' 0\n')
 	f.close()
-
-
-# my_queries = tokenize('qrys.txt')
-# my_documents = tokenizeFile('lyrics.txt')
-# my_stopwords = remove_stopwords()
-# my_docs = create_docword_list(my_documents, my_stopwords)
-# my_documenttf = create_documenttf_dict(my_docs)
-# my_querytf = create_querytf_list(my_queries, my_stopwords)
-# my_collection_length = len(my_docs)
-# my_avg_doclength = get_avg_doclength(my_docs, my_collection_length)
-
-# output_similarities(my_docs, my_querytf, my_documenttf, my_collection_length, my_avg_doclength)
