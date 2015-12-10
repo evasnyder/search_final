@@ -1,4 +1,4 @@
-import dBDelegate, tfidf
+import dBDelegate, tfidf, re, string
 from bson.objectid import ObjectId
 from collections import Counter
 
@@ -119,33 +119,43 @@ compareLists(query, relevant_positional_index, songs_that_contain_all_query_word
 
 # *********************************************************************** 
 
-all_docs = find('_id' is songs_that_contain_all_query_words)
-
-# looping through every song that contains every word in the query
-for i in range(0:len(songs_that_contain_all_query_words)):
-	# looping through every document after every document you're on
-	for n in range(i:len(songs_that_contain_all_query_words)):
-		# compare
+print songs_that_contain_all_query_words
 
 
+def getAverageLength(songs_that_contain_all_query_words):
+	punct = re.compile(r'[\s{}]+'.format(re.escape(string.punctuation)))
+	sum_lyrics = 0
+	for objectid in songs_that_contain_all_query_words:
+		song = db.songs.find_one({"_id":ObjectId(objectid)})
+		lyrics = song["lyrics"]
+
+		lyrics = punct.split(lyrics.lower())
+		print lyrics
+
+		sum_lyrics += len(lyrics)
+		print sum_lyrics
+
+	print sum_lyrics/len(songs_that_contain_all_query_words)
+
+
+getAverageLength(songs_that_contain_all_query_words)
 
 
 
 
 
 
+# total_song_length = 0
+# for document in songs_that_contain_all_query_words:
+# 	song = db.songs.find_one({"_id":ObjectId(document)})
+# 	lyrics = song["lyrics"]
+# 	print len(lyrics)
+# 	print Counter(lyrics.split())
+# 	# total_song_length += Counter(lyrics.split())
+# 	# print total_song_length
 
-total_song_length = 0
-for document in songs_that_contain_all_query_words:
-	song = db.songs.find_one({"_id":ObjectId(document)})
-	lyrics = song["lyrics"]
-	print len(lyrics)
-	print Counter(lyrics.split())
-	# total_song_length += Counter(lyrics.split())
-	# print total_song_length
-
-averageLength = total_song_length / len(songs_that_contain_all_query_words)
-print averageLength
+# averageLength = total_song_length / len(songs_that_contain_all_query_words)
+# print averageLength
 	# print lyrics
 
 	# tfidf.output_similarities(my_docs, my_querytf, my_documenttf, my_collection_length, my_avg_doclength)
