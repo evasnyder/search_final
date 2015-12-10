@@ -108,22 +108,23 @@ query = ["what", "you", "eat", "don", "t", "make", "me", "shit"]
 
 relevant_positional_index = createPositionalIndex(db, query)
 
-test = getIntersectingPositionalIndex(db, ["what", "you", "eat", "don", "t", "make", "me", "shit"])
+songs_that_contain_all_query_words = getIntersectingPositionalIndex(db, ["what", "you", "eat", "don", "t", "make", "me", "shit"])
 
 # for t in test:
 	# print dBDelegate.getSongURL(db, t)
 
-compareLists(query, relevant_positional_index, test)
+compareLists(query, relevant_positional_index, songs_that_contain_all_query_words)
 
 
 
 # *********************************************************************** 
 
-all_docs = find('_id' is test)
+all_docs = find('_id' is songs_that_contain_all_query_words)
 
 # looping through every song that contains every word in the query
-for i in range(0:len(test)):
-	for n in range(i:len(test)):
+for i in range(0:len(songs_that_contain_all_query_words)):
+	# looping through every document after every document you're on
+	for n in range(i:len(songs_that_contain_all_query_words)):
 		# compare
 
 
@@ -135,7 +136,7 @@ for i in range(0:len(test)):
 
 
 total_song_length = 0
-for document in test:
+for document in songs_that_contain_all_query_words:
 	song = db.songs.find_one({"_id":ObjectId(document)})
 	lyrics = song["lyrics"]
 	print len(lyrics)
@@ -143,7 +144,7 @@ for document in test:
 	# total_song_length += Counter(lyrics.split())
 	# print total_song_length
 
-averageLength = total_song_length / len(test)
+averageLength = total_song_length / len(songs_that_contain_all_query_words)
 print averageLength
 	# print lyrics
 
