@@ -90,3 +90,14 @@ def scrapeSongByURL(url):
 
     return Song(song_title, artist, lyrics, url)
 
+def scrapeAnnotationsByURL(url):
+    page = requests.get(url)
+
+    soup = BeautifulSoup(page.text, "lxml")
+    annotations = soup.find_all('a', class_ = '')
+    for block in annotations:
+        if 'data-id' in  block.attrs:
+            print block.attrs['data-id']
+    return soup.prettify()
+
+scrapeAnnotationsByURL('http://genius.com/Kendrick-lamar-king-kunta-lyrics')
