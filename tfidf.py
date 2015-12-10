@@ -56,7 +56,6 @@ def create_song_dict(songs, stopwords):
 def create_songtf_dict(song_dict):
 	songtf_dict = dict()
 	for song in song_dict.items():
-		print song
 		# for each unique word
 		for word in set(song[1]):
 			# if we've already seen that word in the document, increment the counter
@@ -93,5 +92,11 @@ def output_similarities(song_dict, querytf_list, songtf, collection_length, avg_
 				# calculate the tfidf score for it 
 				similarity += (querytf * (raw_tf)/(raw_tf + (k * len(song)/avg_songlength))) * math.log10(collection_length/songtf[query_word])
 		# write to the file
-		f.write(' 0 ' + str(song_url) + ' 0 ' + str(similarity) + ' 0\n')
+		f.write(str(song_url) + ' 0 ' + str(similarity) + ' 0\n')
 	f.close()
+
+
+
+
+
+

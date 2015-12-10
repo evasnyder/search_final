@@ -2,7 +2,6 @@ import dBDelegate, tfidf, re, string
 from bson.objectid import ObjectId
 from collections import Counter
 
-# appropriate_punctuation = '!"#$%&()*+,./:;<=>?@[\\]^_`{|}~'
 
 def getIntersectingPositionalIndex(db, query):
 	intersected_positional_list = dict()
@@ -95,7 +94,11 @@ def createPositionalIndex(db, query):
 
 	# print relevant_positional_index
 	return relevant_positional_index
-	
+
+
+
+# * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * # 
+
 db = dBDelegate.getDBConnection()
 query = ["what", "you", "eat", "don", "t", "make", "me", "shit"]
 
@@ -111,6 +114,8 @@ my_collection_length = len(my_songs)
 my_avg_songlength = tfidf.get_avg_songlength(my_songs)
 
 tfidf.output_similarities(my_songs, my_querytf, my_songtf, my_collection_length, my_avg_songlength)
+
+# * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * # 
 
 
 
