@@ -2,12 +2,6 @@ import dBDelegate, tfidf, re, string
 from bson.objectid import ObjectId
 from collections import Counter
 
-positional_lists_for_document ={
-	"pizzas" : { "doc1" : [1,2,3,4,5,6,7,8], "doc2": [3,6,8,9,10,15], "doc3": [4,5,8,12,66], "doc4": [1,2,3,4,10]},
-	"are": {"doc1" : [9,27,88,100], "doc2": [4,5,11,18], "doc4": [5, 11]},
-	"dope": {"doc1" : [10], "doc3": [6, 11, 13, 68], "doc4": [6]}
-}
-
 # appropriate_punctuation = '!"#$%&()*+,./:;<=>?@[\\]^_`{|}~'
 
 def getIntersectingPositionalIndex(db, query):
@@ -36,11 +30,8 @@ def getIntersectingPositionalIndex(db, query):
 	# return intersected_positional_list
 
 def detectSample(current_index, query, document_id):
-	# global positional_lists_for_document
-
 	# [20, 40, 67] hello
 	current_positional_list = positional_index[query[0]]['document_dict'][document_id]
-
 
 	# get the next index of the next word to see if it exists and then if it comes right after the current index
 	next_index = current_positional_list.index(current_index+1) if current_index+1 in current_positional_list else None
@@ -106,14 +97,11 @@ def createPositionalIndex(db, query):
 	return relevant_positional_index
 	
 db = dBDelegate.getDBConnection()
-query = ["what", "you", "eat", "don", "t", "make", "me", "shit"]
+query = ["what", "you", "eat", "don't", "make", "me", "shit"]
 
 relevant_positional_index = createPositionalIndex(db, query)
 
-songs_that_contain_all_query_words = getIntersectingPositionalIndex(db, ["what", "you", "eat", "don", "t", "make", "me", "shit"])
-
-# for t in test:
-	# print dBDelegate.getSongURL(db, t)
+songs_that_contain_all_query_words = getIntersectingPositionalIndex(db, ["what", "you", "eat", "don't", "make", "me", "shit"])
 
 compareLists(query, relevant_positional_index, songs_that_contain_all_query_words)
 
