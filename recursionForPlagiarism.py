@@ -97,12 +97,10 @@ def createPositionalIndex(db, query):
 	return relevant_positional_index
 	
 db = dBDelegate.getDBConnection()
-query = ["what", "you", "eat", "don't", "make", "me", "shit"]
+query = ["what", "you", "eat", "don", "t", "make", "me", "shit"]
 
 relevant_positional_index = createPositionalIndex(db, query)
-
-songs_that_contain_all_query_words = getIntersectingPositionalIndex(db, ["what", "you", "eat", "don't", "make", "me", "shit"])
-
+songs_that_contain_all_query_words = getIntersectingPositionalIndex(db, query)
 compareLists(query, relevant_positional_index, songs_that_contain_all_query_words)
 
 my_stopwords = tfidf.remove_stopwords()
