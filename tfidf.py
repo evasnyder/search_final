@@ -34,12 +34,12 @@ def create_querytf_list(tokenized_query, stopwords):
 
 	return querytf_dict
 
-# Creat the list of document words formatted and split correctly
+# Create the list of document words formatted and split correctly
 def create_song_dict(songs, stopwords):
 	song_dict = dict()
 
 	for objectid in songs:
-		song = db.songs.find_one({"_id":ObjectId(objectid)})
+		song = db.word_index.find_one({"_id":ObjectId(objectid)})
 		lyrics = song["lyrics"]
 		lyrics = punct.split(lyrics.lower())
 		#  lyrics = [w for w in lyrics if w not in stopwords]

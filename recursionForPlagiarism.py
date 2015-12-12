@@ -28,7 +28,7 @@ def getIntersectingPositionalIndex(db, query):
 	return intersected_positional_list[query[0]].keys()
 	# return intersected_positional_list
 
-def detectSample(current_index, query, document_id):
+def detectSample(current_index, query, document_id, positional_weight):
 	# [20, 40, 67] hello
 	current_positional_list = positional_index[query[0]]['document_dict'][document_id]
 
@@ -38,11 +38,14 @@ def detectSample(current_index, query, document_id):
 	if next_index != None:
 		# if you've looked through the entire query and made it to this point: it samples the query
 		if len(query) == 1:
+			# calculate tf.idf 
 			return True
 		else:
+			positional_weight += 1
 			# else call the detect sample again while looking at the next query index
-			return detectSample(current_index+1, query[1:], document_id)
+			return detectSample(current_index+1, query[1:], document_id, positional_weight)
 	else:
+		# calculate tf.idf
 		return False
 
 
@@ -64,7 +67,7 @@ def compareLists(query, relevant_positional_index, possible_document_matches):
 			# print positional_index[query[0]]
 			for position in positional_index[query[0]]['document_dict'][document]:
 				# calling a recursive method to see if the song actually contains the query
-				song_contains_query = detectSample(position, query[1:], document)
+				song_contains_query = detectSample(position, query[1:], document, 0)
 
 				# if the song does contain the query, add the document name to a list
 				if song_contains_query:
