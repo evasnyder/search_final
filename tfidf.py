@@ -103,7 +103,7 @@ def calculateTfidf(query, positional_index, list_of_matching_documents, avg_song
 		for word in set(query):
 			querytf = query.count(word)
 			raw_tf = len(positional_index[word]['document_dict'][song])
-			songtf = len(positional_index[word])
+			songtf = len(positional_index[word]['document_dict'])
 			similarity += (querytf * (raw_tf)/(raw_tf + (k * len(song)/avg_songlength))) * math.log10(collection_length/songtf)
 		f.write(str(song) + ' 0 ' + str(similarity) + ' 0\n')
 	f.close()
