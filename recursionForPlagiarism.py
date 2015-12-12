@@ -109,14 +109,15 @@ relevant_positional_index = createPositionalIndex(db, query)
 songs_that_contain_all_query_words = getIntersectingPositionalIndex(db, query)
 compareLists(query, relevant_positional_index, songs_that_contain_all_query_words)
 
-my_stopwords = tfidf.remove_stopwords()
-my_songs = tfidf.create_song_dict(songs_that_contain_all_query_words, my_stopwords)
-my_songtf = tfidf.create_songtf_dict(my_songs)
-my_querytf = tfidf.create_querytf_list(query, my_stopwords)
-my_collection_length = len(my_songs)
-my_avg_songlength = tfidf.get_avg_songlength(my_songs)
+# my_stopwords = tfidf.remove_stopwords()
+# my_songs = tfidf.create_song_dict(songs_that_contain_all_query_words, my_stopwords)
+# my_songtf = tfidf.create_songtf_dict(my_songs)
+# my_querytf = tfidf.create_querytf_list(query, my_stopwords)
+my_collection_length = db.songs.count()
+# my_avg_songlength = tfidf.get_avg_songlength(db.songs)
 
-tfidf.output_similarities(my_songs, my_querytf, my_songtf, my_collection_length, my_avg_songlength)
+# tfidf.output_similarities(my_songs, my_querytf, my_songtf, my_collection_length, my_avg_songlength)
+tfidf.calculateTfidf(query, relevant_positional_index, songs_that_contain_all_query_words, 681, my_collection_length)
 
 # * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * # 
 
