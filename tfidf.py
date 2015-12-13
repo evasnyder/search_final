@@ -41,8 +41,8 @@ def sortTfidfValues(tfidf_values):
 	sorted_tfidf = sorted(tfidf_values.items(), key=lambda x: x[0])
 	sorted_tfidf.reverse()
 
-	x = itertools.islice(sorted_tfidf, 0, 10)
-	for song, tfidf in x:
+	top_10_values = itertools.islice(sorted_tfidf, 0, 10)
+	for song, tfidf in top_10_values:
 		print dBDelegate.getSongURL(db, song), tfidf
 
 
