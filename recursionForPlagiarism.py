@@ -99,7 +99,7 @@ def createPositionalIndex(db, query):
 def calculateWeightedTfidf(sampled_songs, query, relevant_positional_index, songs_that_contain_all_query_words):
 	my_collection_length = db.songs.count()
 	tfidf_values = dict()
-
+	open('tfidf_samples.txt', 'w').close()
 	for weight, songs in sampled_songs.iteritems():
 		for song in songs: 
 			tfidf.calculateTfidf(query, relevant_positional_index, song, 681, my_collection_length, weight, tfidf_values)
