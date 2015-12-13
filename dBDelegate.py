@@ -1,5 +1,5 @@
 from pymongo import MongoClient
-from geniusScraper import Song
+from GeniusScraper import Song
 from datetime import datetime
 from bson.objectid import ObjectId
 
@@ -7,7 +7,7 @@ def getDBConnection():
 	return MongoClient().lyrics_database
 
 def prepareDB():
-	lyrics_db = MongoClient.lyrics_database
+	lyrics_db = MongoClient().lyrics_database
 	metadata_exists_check = lyrics_db.songs.find({'average_length' : {'$exists' : True}})
 	if metadata_exists_check.count() == 0:
 		lyrics_db.songs.insert_one({'average_length' : 0 })
