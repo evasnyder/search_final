@@ -63,7 +63,6 @@ def compareLists(query, relevant_positional_index, possible_document_matches):
 	# Searching through all of the documents with every word in the query to see if the words come one after another
 	for document in possible_document_matches:
 		# word: 1{20, 40, 67} == gives you [20, 40, 67]
-		# print positional_index[query[0]]
 		max_substring_length = 1
 		for index, word in enumerate(query):
 
@@ -73,12 +72,10 @@ def compareLists(query, relevant_positional_index, possible_document_matches):
 			for position in positional_index[word]['document_dict'][document]:
 				# calling a recursive method to see if the song actually contains the query
 				substring_length_from_n = detectSample(position, query[index+1:], document, 1)
-				# print substring_length_from_n
 
 				if substring_length_from_n > max_substring_length:
 					max_substring_length = substring_length_from_n
 			
-		
 		# if the song does contain the query, add the document name to a list
 		if max_substring_length > len(query)*.25:
 			max_substring_length = max_substring_length * .5
@@ -86,12 +83,7 @@ def compareLists(query, relevant_positional_index, possible_document_matches):
 				sampled_songs[max_substring_length].append(document)
 			else:
 				sampled_songs[max_substring_length] = [document]
-
-	# for length, t in sampled_songs.iteritems():
-	# 	for url in t:
-	# 		print length, dBDelegate.getSongURL(db, url)
-	
-	# print sampled_songs				
+			
 	return sampled_songs
 
 def createPositionalIndex(db, query):
@@ -136,16 +128,6 @@ songs_that_contain_all_query_words = getIntersectingPositionalIndex(db, query)
 sampled_songs = compareLists(query, relevant_positional_index, songs_that_contain_all_query_words)
 
 calculateWeightedTfidf(sampled_songs, query, relevant_positional_index, songs_that_contain_all_query_words)
-
-# my_stopwords = tfidf.remove_stopwords()
-# my_songs = tfidf.create_song_dict(songs_that_contain_all_query_words, my_stopwords)
-# my_songtf = tfidf.create_songtf_dict(my_songs)
-# my_querytf = tfidf.create_querytf_list(query, my_stopwords)
-# my_collection_length = db.songs.count()
-# my_avg_songlength = tfidf.get_avg_songlength(db.songs)
-
-# tfidf.output_similarities(my_songs, my_querytf, my_songtf, my_collection_length, my_avg_songlength)
-# tfidf.calculateTfidf(query, relevant_positional_index, songs_that_contain_all_query_words, 681, my_collection_length)
 
 # * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * # 
 
