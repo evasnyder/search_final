@@ -96,15 +96,6 @@ def createPositionalIndex(db, query):
 	# print relevant_positional_index
 	return relevant_positional_index
 
-def createPositionalIndex(db, query):
-	# take away duplicates
-	query = set(query)
-	relevant_positional_index = {}
-	for word in query:
-		relevant_positional_index[word] = db.word_index.find_one({"word": word})
-
-	# print relevant_positional_index
-	return relevant_positional_index
 
 def calculateWeightedTfidf(sampled_songs, query, relevant_positional_index, songs_that_contain_all_query_words):
 	my_collection_length = db.songs.count()
