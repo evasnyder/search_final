@@ -19,7 +19,7 @@ def remove_stopwords():
 	return stopwords
 
 def calculateTfidf(query, positional_index, song, avg_songlength, collection_length, weight):
-	f = open('tfidf_samples.txt', 'w')
+	f = open('tfidf_samples.txt', 'a')
 	# for song in list_of_matching_documents:
 	similarity = 0
 	for word in set(query):
