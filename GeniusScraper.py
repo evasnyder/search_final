@@ -49,12 +49,17 @@ def lyricHandler(url_list):
         page = requests.get(url)
 
         soup = BeautifulSoup(page.text, "lxml")
-        artist = soup.find('span', class_='text_artist').text.strip()
-        lyrics = soup.find('div', class_='lyrics').text.strip()
-        song_title = soup.find('span', class_='text_title').text.strip()
+        genre_tags = soup.find('p', class_='tags song_meta_item').text
+        
+        if 'R&B' or 'Pop' or "Rap" in genre_tags:
 
-        new_song = Song(song_title, artist, lyrics, url)
-        song_list.append(new_song)
+            artist = soup.find('span', class_='text_artist').text.strip()
+            lyrics = soup.find('div', class_='lyrics').text.strip()
+            song_title = soup.find('span', class_='text_title').text.strip()
+
+            new_song = Song(song_title, artist, lyrics, url)
+            song_list.append(new_song)
+
     if len(song_list) > 0:
         return song_list
     else:
@@ -100,4 +105,4 @@ def scrapeAnnotationsByURL(url):
             print block.attrs['data-id']
     return soup.prettify()
 
-scrapeAnnotationsByURL('http://genius.com/Kendrick-lamar-king-kunta-lyrics')
+#scrapeAnnotationsByURL('http://genius.com/Kendrick-lamar-king-kunta-lyrics')

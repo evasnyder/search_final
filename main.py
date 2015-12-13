@@ -19,8 +19,7 @@ def test_main(base, cap):
 			for song in song_list:
 				db = dBDelegate.getDBConnection()
 				song_lyrics = positionalIndex.tokenizeText(song.lyrics)
-				lyrics = positionalIndex.tokenizeLyrics(song.lyrics)
-				song_id = dBDelegate.addSongMetadata(db, song.url, song.artist, song.title, lyrics)
+				song_id = dBDelegate.addSongMetadata(db, song.url, song.artist, song.title)
 
 				song_positional = positionalIndex.createPositionalIndex(song_lyrics)
 				dBDelegate.addPositionalIndex(db, song_positional, song_id)
