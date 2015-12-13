@@ -1,4 +1,4 @@
-import sys, geniusScraper, dBDelegate, positionalIndex
+import sys, GeniusScraper, dBDelegate, positionalIndex
 from datetime import datetime
 
 def main(self):
@@ -13,7 +13,7 @@ def main(self):
 
 def test_main(base, cap):
 
-	artist_list = geniusScraper.scrapeLyricsByArtist(base, cap)
+	artist_list = GeniusScraper.scrapeLyricsByArtist(base, cap)
 	if artist_list != None:
 		for song_list in artist_list:
 			for song in song_list:
@@ -28,7 +28,7 @@ def addTestLyrics(urls):
 	db = dBDelegate.getDBConnection()
 
 	for url in urls:
-		song = geniusScraper.scrapeSongByURL(url)
+		song = GeniusScraper.scrapeSongByURL(url)
 
 		song_lyrics = positionalIndex.tokenizeText(song.lyrics)
 		lyrics = positionalIndex.tokenizeLyrics(song.lyrics)

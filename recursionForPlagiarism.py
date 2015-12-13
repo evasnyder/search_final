@@ -38,16 +38,13 @@ def detectSample(current_index, query, document_id, positional_weight):
 	if next_index != None:
 		# if you've looked through the entire query and made it to this point: it samples the query
 		if len(query) == 1:
-			print "Full Sample"
 			return positional_weight
 		else: 
 			positional_weight += 1
-			print positional_weight
 			# else call the detect sample again while looking at the next query index
 			return detectSample(current_index+1, query[1:], document_id, positional_weight)
 	
 	else:
-		print query[0]
 		return positional_weight + 1
 
 
@@ -68,7 +65,6 @@ def compareLists(query, relevant_positional_index, possible_document_matches):
 		# word: 1{20, 40, 67} == gives you [20, 40, 67]
 		# print positional_index[query[0]]
 		max_substring_length = 1
-		print dBDelegate.getSongURL(db, document)
 		for index, word in enumerate(query):
 
 			if max_substring_length >= len(query[index:]):
@@ -80,7 +76,6 @@ def compareLists(query, relevant_positional_index, possible_document_matches):
 				# print substring_length_from_n
 
 				if substring_length_from_n > max_substring_length:
-					print "Substring greater than max:" + str(substring_length_from_n) + " **** " + str(max_substring_length)
 					max_substring_length = substring_length_from_n
 			
 		
@@ -92,9 +87,9 @@ def compareLists(query, relevant_positional_index, possible_document_matches):
 			else:
 				sampled_songs[max_substring_length] = [document]
 
-	for length, t in sampled_songs.iteritems():
-		for url in t:
-			print length, dBDelegate.getSongURL(db, url)
+	# for length, t in sampled_songs.iteritems():
+	# 	for url in t:
+	# 		print length, dBDelegate.getSongURL(db, url)
 	
 	# print sampled_songs				
 	return sampled_songs
@@ -124,8 +119,10 @@ def calculateWeightedTfidf(sampled_songs, query, relevant_positional_index, song
 	print sampled_songs
 
 	for weight, songs in sampled_songs.iteritems():
+		print weight
 		for song in songs: 
-			tfidf.calculateTfidf(query, relevant_positional_index, songs_that_contain_all_query_words, 681, my_collection_length, weight)
+			# print song
+			tfidf.calculateTfidf(query, relevant_positional_index, song, 681, my_collection_length, weight)
 
 
 

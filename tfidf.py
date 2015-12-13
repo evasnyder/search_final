@@ -96,17 +96,21 @@ def output_similarities(song_dict, querytf_list, songtf, collection_length, avg_
 	f.close()
 
 
-def calculateTfidf(query, positional_index, list_of_matching_documents, avg_songlength, collection_length, weight):
+def calculateTfidf(query, positional_index, song, avg_songlength, collection_length, weight):
 	f = open('tfidf_samples.txt', 'w')
-	for song in list_of_matching_documents:
-		similarity = 0
-		for word in set(query):
-			querytf = query.count(word)
-			raw_tf = len(positional_index[word]['document_dict'][song])
-			songtf = len(positional_index[word]['document_dict'])
-			similarity += (querytf * (raw_tf)/(raw_tf + (k * len(song)/avg_songlength))) * math.log10(collection_length/songtf)
-		#print (str(song) + ' 0 ' + str(similarity + weight) + ' 0\n')
-		f.write(str(song) + ' 0 ' + str(similarity + weight) + ' 0\n')
+	print song
+	# for song in list_of_matching_documents:
+	similarity = 0
+	for word in set(query):
+		querytf = query.count(word)
+		raw_tf = len(positional_index[word]['document_dict'][song])
+		songtf = len(positional_index[word]['document_dict'])
+		similarity += (querytf * (raw_tf)/(raw_tf + (k * len(song)/avg_songlength))) * math.log10(collection_length/songtf)
+	
+	print weight
+	print dBDelegate.getSongURL(db, song)
+	print (str(song) + ' 0 ' + str(similarity + weight) + ' 0\n')
+	f.write(str(song) + ' 0 ' + str(similarity + weight) + ' 0\n')
 	f.close()
 
 
