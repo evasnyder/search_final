@@ -31,11 +31,19 @@ def calculateTfidf(query, positional_index, song, avg_songlength, collection_len
 	tfidf_vlaues[song] = similarity + weight
 	f.write(str(song) + ' ' + str(similarity + weight) + '\n')
 	f.close()
-	print tfidf_vlaues
+
 	return tfidf_vlaues
 
-def sortTfidfValues(tfidf_vlaues):
-	sorted_tfidf = sorted(d.items(), key=lambda x: x[1])
+def sortTfidfValues(tfidf_values):
+	sorted_tfidf = sorted(tfidf_values.items(), key=lambda x: x[0])
+	sorted_tfidf.reverse()
+	top_10 = 0
+	for song, tfidf in sorted_tfidf:
+		if top_10 != 10:
+			print song, tfidf
+			top_10 += 1
+		else: 
+			break
 
 
 
