@@ -62,7 +62,7 @@ def compareLists(query, relevant_positional_index, possible_document_matches):
 
 	# Searching through all of the documents with every word in the query to see if the words come one after another
 	for document in possible_document_matches:
-		print dBDelegate.getSongURL(db, document)
+		
 		# word: 1{20, 40, 67} == gives you [20, 40, 67]
 		max_substring_length = 1
 		for index, word in enumerate(query):
@@ -75,9 +75,9 @@ def compareLists(query, relevant_positional_index, possible_document_matches):
 				substring_length_from_n = detectSample(position, query[index+1:], document, 1)
 
 				if substring_length_from_n > max_substring_length:
-          if substring_length_from_n > len(query)*.25:
-            print query[index: substring_length_from_n+index]
 					max_substring_length = substring_length_from_n
+					if max_substring_length > len(query)*.25:
+						print dBDelegate.getSongURL(db, document), query[index: substring_length_from_n+index]
 			
 		# if the song does contain the query, add the document name to a list
 		if max_substring_length > len(query)*.25:
