@@ -105,7 +105,8 @@ def calculateWeightedTfidf(sampled_songs, query, relevant_positional_index, song
 	open('tfidf_samples.txt', 'w').close()
 	for weight, songs in sampled_songs.iteritems():
 		for song in songs: 
-			tfidf.calculateTfidf(query, relevant_positional_index, song, average_song_length, my_collection_length, weight, tfidf_values)
+			tfidf_values = tfidf.calculateTfidf(query, relevant_positional_index, song, average_song_length, my_collection_length, weight, tfidf_values)
+	print tfidf_values
 	return tfidf_values
 
 # * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * # 
