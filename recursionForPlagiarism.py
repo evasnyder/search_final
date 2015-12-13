@@ -98,15 +98,13 @@ def createPositionalIndex(db, query):
 
 def calculateWeightedTfidf(sampled_songs, query, relevant_positional_index, songs_that_contain_all_query_words):
 	my_collection_length = db.songs.count()
-	print sampled_songs
+	tfidf_values = dict()
 
 	for weight, songs in sampled_songs.iteritems():
-		print weight
 		for song in songs: 
-			# print song
-			tfidf.calculateTfidf(query, relevant_positional_index, song, 681, my_collection_length, weight)
+			tfidf.calculateTfidf(query, relevant_positional_index, song, 681, my_collection_length, weight, tfidf_values)
 
-
+	return tfidf_values
 
 # * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * # 
 
@@ -117,7 +115,8 @@ relevant_positional_index = createPositionalIndex(db, query)
 songs_that_contain_all_query_words = getIntersectingPositionalIndex(db, query)
 sampled_songs = compareLists(query, relevant_positional_index, songs_that_contain_all_query_words)
 
-calculateWeightedTfidf(sampled_songs, query, relevant_positional_index, songs_that_contain_all_query_words)
+tfidf_values = calculateWeightedTfidf(sampled_songs, query, relevant_positional_index, songs_that_contain_all_query_words)
+tfidf.sortTfidfValues(tfidf_values)
 
 # * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * # 
 

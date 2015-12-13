@@ -18,7 +18,7 @@ def remove_stopwords():
 	stopwords_file.close()
 	return stopwords
 
-def calculateTfidf(query, positional_index, song, avg_songlength, collection_length, weight):
+def calculateTfidf(query, positional_index, song, avg_songlength, collection_length, weight, tfidf_vlaues):
 	f = open('tfidf_samples.txt', 'a')
 	# for song in list_of_matching_documents:
 	similarity = 0
@@ -27,9 +27,18 @@ def calculateTfidf(query, positional_index, song, avg_songlength, collection_len
 		raw_tf = len(positional_index[word]['document_dict'][song])
 		songtf = len(positional_index[word]['document_dict'])
 		similarity += (querytf * (raw_tf)/(raw_tf + (k * len(song)/avg_songlength))) * math.log10(collection_length/songtf)
-	print (str(song) + ' 0 ' + str(similarity + weight) + ' 0\n')
-	f.write(str(song) + ' 0 ' + str(similarity + weight) + ' 0\n')
+	# print (str(song) + ' 0 ' + str(similarity + weight) + ' 0\n')
+	tfidf_vlaues[song] = similarity + weight
+	f.write(str(song) + ' ' + str(similarity + weight) + '\n')
 	f.close()
+	print tfidf_vlaues
+	return tfidf_vlaues
+
+def sortTfidfValues(tfidf_vlaues):
+	sorted_tfidf = sorted(d.items(), key=lambda x: x[1])
+
+
+
 
 
 
