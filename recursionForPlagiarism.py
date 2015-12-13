@@ -79,7 +79,7 @@ def compareLists(query, relevant_positional_index, possible_document_matches):
 				substring_length_from_n = detectSample(position, query[index+1:], document, 1)
 				# print substring_length_from_n
 
-				if substring_length_from_n >= max_substring_length:
+				if substring_length_from_n > max_substring_length:
 					print "Substring greater than max:" + str(substring_length_from_n) + " **** " + str(max_substring_length)
 					max_substring_length = substring_length_from_n
 			
