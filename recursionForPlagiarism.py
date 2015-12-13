@@ -75,7 +75,8 @@ def compareLists(query, relevant_positional_index, possible_document_matches):
 				substring_length_from_n = detectSample(position, query[index+1:], document, 1)
 
 				if substring_length_from_n > max_substring_length:
-					print query[index: substring_length_from_n+index]
+          if substring_length_from_n > len(query)*.25:
+            print query[index: substring_length_from_n+index]
 					max_substring_length = substring_length_from_n
 			
 		# if the song does contain the query, add the document name to a list
