@@ -3,6 +3,9 @@ import re, string, math, random
 import dBDelegate
 from bson.objectid import ObjectId
 from collections import Counter
+from itertools import islice
+import itertools
+import collections
 
 import crawler
 
@@ -37,13 +40,10 @@ def calculateTfidf(query, positional_index, song, avg_songlength, collection_len
 def sortTfidfValues(tfidf_values):
 	sorted_tfidf = sorted(tfidf_values.items(), key=lambda x: x[0])
 	sorted_tfidf.reverse()
-	top_10 = 0
-	for song, tfidf in sorted_tfidf:
-		if top_10 != 10:
-			print dBDelegate.getSongURL(db, song), tfidf
-			top_10 += 1
-		else: 
-			break
+
+	x = itertools.islice(sorted_tfidf, 0, 10)
+	for song, tfidf in x:
+		print dBDelegate.getSongURL(db, song), tfidf
 
 
 
