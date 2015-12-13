@@ -37,15 +37,15 @@ def detectSample(current_index, query, document_id, positional_weight):
 
 	if next_index != None:
 		# if you've looked through the entire query and made it to this point: it samples the query
+		positional_weight += 1
 		if len(query) == 1:
 			return positional_weight
 		else: 
-			positional_weight += 1
 			# else call the detect sample again while looking at the next query index
 			return detectSample(current_index+1, query[1:], document_id, positional_weight)
 	
 	else:
-		return positional_weight + 1
+		return positional_weight
 
 
 # relevant_positional_index: dictionary of all of the positions for all of the docs we're going to be searching
@@ -62,6 +62,7 @@ def compareLists(query, relevant_positional_index, possible_document_matches):
 
 	# Searching through all of the documents with every word in the query to see if the words come one after another
 	for document in possible_document_matches:
+		print dBDelegate.getSongURL(db, document)
 		# word: 1{20, 40, 67} == gives you [20, 40, 67]
 		max_substring_length = 1
 		for index, word in enumerate(query):
@@ -74,6 +75,7 @@ def compareLists(query, relevant_positional_index, possible_document_matches):
 				substring_length_from_n = detectSample(position, query[index+1:], document, 1)
 
 				if substring_length_from_n > max_substring_length:
+					print query[index: substring_length_from_n+index]
 					max_substring_length = substring_length_from_n
 			
 		# if the song does contain the query, add the document name to a list
