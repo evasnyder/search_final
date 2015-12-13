@@ -40,7 +40,7 @@ def sortTfidfValues(tfidf_values):
 	top_10 = 0
 	for song, tfidf in sorted_tfidf:
 		if top_10 != 10:
-			print song, tfidf
+			print dBDelegate.getSongURL(db, song), tfidf
 			top_10 += 1
 		else: 
 			break
