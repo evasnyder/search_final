@@ -106,7 +106,6 @@ def calculateWeightedTfidf(sampled_songs, query, relevant_positional_index, song
 	for weight, songs in sampled_songs.iteritems():
 		for song in songs: 
 			tfidf.calculateTfidf(query, relevant_positional_index, song, average_song_length, my_collection_length, weight, tfidf_values)
-
 	return tfidf_values
 
 # * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * # 
@@ -121,7 +120,6 @@ average_song_length = db.songs.find_one({'average_length' : {'$exists' : True}})
 
 tfidf_values = calculateWeightedTfidf(sampled_songs, query, relevant_positional_index, songs_that_contain_all_query_words, average_song_length)
 tfidf.sortTfidfValues(tfidf_values)
-
 
 # * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * # 
 
