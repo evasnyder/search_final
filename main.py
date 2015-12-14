@@ -38,5 +38,5 @@ def addTestLyrics(urls):
 		dBDelegate.addPositionalIndex(db, song_positional, song_id)
 
 
-test_main(1,2)
+test_main(20,31)
 addTestLyrics(["http://genius.com/Jay-z-heart-of-the-city-aint-no-love-lyrics", "http://genius.com/J-cole-forbidden-fruit-lyrics"])
