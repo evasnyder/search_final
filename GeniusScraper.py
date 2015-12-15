@@ -49,24 +49,13 @@ def lyricHandler(url_list):
         page = requests.get(url)
 
         soup = BeautifulSoup(page.text, "lxml")
-        genre_tags = soup.find('p', class_='tags song_meta_item')
-        if genre_tags != None:
-            genre_tags = genre_tags.text
-            if 'R&B' or 'Pop' or "Rap" in genre_tags:
 
-                artist = soup.find('span', class_='text_artist').text.strip()
-                lyrics = soup.find('div', class_='lyrics').text.strip()
-                song_title = soup.find('span', class_='text_title').text.strip()
+        artist = soup.find('span', class_='text_artist').text.strip()
+        lyrics = soup.find('div', class_='lyrics').text.strip()
+        song_title = soup.find('span', class_='text_title').text.strip()
 
-                new_song = Song(song_title, artist, lyrics, url)
-                song_list.append(new_song)
-        else:
-            artist = soup.find('span', class_='text_artist').text.strip()
-            lyrics = soup.find('div', class_='lyrics').text.strip()
-            song_title = soup.find('span', class_='text_title').text.strip()
-
-            new_song = Song(song_title, artist, lyrics, url)
-            song_list.append(new_song)
+        new_song = Song(song_title, artist, lyrics, url)
+        song_list.append(new_song)
 
     if len(song_list) > 0:
         return song_list
@@ -84,7 +73,7 @@ def scrapeLyricsByArtist(base, top_bound = None):
             if artist_test["meta"]["status"] != 404:
                 artist_list.append(lyricHandler(artist_test["response"]["songs"]))
     else:
-        artist_test = artistSearch(base, 4)
+        artist_test = artistSearch(base, 2000)
         if artist_test["meta"]["status"] != 404:
             artist_list.append(lyricHandler(artist_test["response"]["songs"]))
     if len(artist_list):
@@ -97,17 +86,10 @@ def scrapeSongByURL(url):
 
     soup = BeautifulSoup(page.text, "lxml")
 
-    genre_tags = soup.find('p', class_='tags song_meta_item')
-    if genre_tags != None:
-        genre_tags = genre_tags.text
-        if 'R&B' or 'Pop' or "Rap" in genre_tags:
-            artist = soup.find('span', class_='text_artist').text.strip()
-            lyrics = soup.find('div', class_='lyrics').text.strip()
-            song_title = soup.find('span', class_='text_title').text.strip()
-    else:
-        artist = soup.find('span', class_='text_artist').text.strip()
-        lyrics = soup.find('div', class_='lyrics').text.strip()
-        song_title = soup.find('span', class_='text_title').text.strip()
+    
+    artist = soup.find('span', class_='text_artist').text.strip()
+    lyrics = soup.find('div', class_='lyrics').text.strip()
+    song_title = soup.find('span', class_='text_title').text.strip()
 
     return Song(song_title, artist, lyrics, url)
 
