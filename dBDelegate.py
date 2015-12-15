@@ -60,7 +60,8 @@ def addPositionalIndex(db, positional_index, song_id):
 
 	new_avg_song_length = (avg_song_length * (number_of_songs) + length) / db.songs.count() + 1
 
-	db.songs.update({'average_length' : {'$exists' : True}}, {'average_length' : new_avg_song_length})
+	db.songs.update({'average_length' : {'$exists' : True}}, 
+		{'average_length' : new_avg_song_length})
 
 #  Tests should live here
 def lazyTests():

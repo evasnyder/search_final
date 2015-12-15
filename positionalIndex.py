@@ -75,6 +75,3 @@ def lazyTests():
 
 	toked = createDocwordList([lyrics_text], getStopwords())
 	print createPositionalIndex(toked[0])
-#lazyTests()
-
-print tokenizeText("I love my mom and I love my dad")

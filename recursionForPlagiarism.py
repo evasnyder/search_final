@@ -76,8 +76,8 @@ def compareLists(query, relevant_positional_index, possible_document_matches, db
 
 				if substring_length_from_n > max_substring_length:
 					max_substring_length = substring_length_from_n
-					if max_substring_length > len(query)*.25:
-						print dBDelegate.getSongURL(db, document), query[index: substring_length_from_n+index]
+					if max_substring_length == len(query):
+						print dBDelegate.getSongURL(db, document)
 			
 		# if the song does contain the query, add the document name to a list
 		if max_substring_length > len(query)*.25:
@@ -114,6 +114,8 @@ def calculateWeightedTfidf(sampled_songs, query, relevant_positional_index, song
 def detectASample(query):
 	db = dBDelegate.getDBConnection()
 	query = query
+	print "****************************************************************"
+	print "Songs which contain your query, in perfect order:"
 
 	relevant_positional_index = createPositionalIndex(db, query)
 	songs_that_contain_all_query_words = getIntersectingPositionalIndex(db, query)
