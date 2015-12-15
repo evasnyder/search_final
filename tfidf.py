@@ -38,6 +38,8 @@ def calculateTfidf(query, positional_index, song, avg_songlength, collection_len
 	return tfidf_values
 
 def sortTfidfValues(tfidf_values):
+	print "**************************************************************** \n"
+	print "****************************************************************"
 	sorted_tfidf = sorted(tfidf_values.items(), key=lambda x: (-x[1], x[0]))
 
 	top_10_values = itertools.islice(sorted_tfidf, 0, 20)

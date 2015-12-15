@@ -53,7 +53,7 @@ def detectSample(current_index, query, document_id, positional_weight):
 
 # possible_document_matches: documents that contain every word in the query that you then want to search through
 # possible_document_matches: just a list of documents = [1,2,5...n] 
-def compareLists(query, relevant_positional_index, possible_document_matches):
+def compareLists(query, relevant_positional_index, possible_document_matches, db):
 	global positional_index
 	positional_index = relevant_positional_index
 
@@ -99,28 +99,29 @@ def createPositionalIndex(db, query):
 	# print relevant_positional_index
 	return relevant_positional_index
 
-def calculateWeightedTfidf(sampled_songs, query, relevant_positional_index, songs_that_contain_all_query_words, average_song_length):
+def calculateWeightedTfidf(sampled_songs, query, relevant_positional_index, songs_that_contain_all_query_words, average_song_length, db):
 	my_collection_length = db.songs.count()
 	tfidf_values = dict()
 	open('tfidf_samples.txt', 'w').close()
 	for weight, songs in sampled_songs.iteritems():
 		for song in songs: 
 			tfidf_values = tfidf.calculateTfidf(query, relevant_positional_index, song, average_song_length, my_collection_length, weight, tfidf_values)
-	
 	return tfidf_values
 
 # * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * # 
 
-db = dBDelegate.getDBConnection()
-query = ["ball","so","hard"]
 
-relevant_positional_index = createPositionalIndex(db, query)
-songs_that_contain_all_query_words = getIntersectingPositionalIndex(db, query)
-sampled_songs = compareLists(query, relevant_positional_index, songs_that_contain_all_query_words)
-average_song_length = db.songs.find_one({'average_length' : {'$exists' : True}})['average_length']
+def detectASample(query):
+	db = dBDelegate.getDBConnection()
+	query = query
 
-tfidf_values = calculateWeightedTfidf(sampled_songs, query, relevant_positional_index, songs_that_contain_all_query_words, average_song_length)
-tfidf.sortTfidfValues(tfidf_values)
+	relevant_positional_index = createPositionalIndex(db, query)
+	songs_that_contain_all_query_words = getIntersectingPositionalIndex(db, query)
+	sampled_songs = compareLists(query, relevant_positional_index, songs_that_contain_all_query_words, db)
+	average_song_length = db.songs.find_one({'average_length' : {'$exists' : True}})['average_length']
+
+	tfidf_values = calculateWeightedTfidf(sampled_songs, query, relevant_positional_index, songs_that_contain_all_query_words, average_song_length, db)
+	tfidf.sortTfidfValues(tfidf_values)
 
 # * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * # 
 

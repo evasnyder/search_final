@@ -1,5 +1,6 @@
-import sys, GeniusScraper, dBDelegate, positionalIndex
+import sys, GeniusScraper, dBDelegate, positionalIndex, re, string
 from datetime import datetime
+import recursionForPlagiarism
 
 def main(self):
 	var = raw_input("Please enter lyrics you'd like to search for: ")
@@ -37,6 +38,27 @@ def addTestLyrics(urls):
 		song_positional = positionalIndex.createPositionalIndex(song_lyrics)
 		dBDelegate.addPositionalIndex(db, song_positional, song_id)
 
+def runDetection():
+	punct = re.compile(r'[\s{}]+'.format(re.escape(string.punctuation)))
+	query = raw_input("Please enter a query: ")
+	query = punct.split(query.lower())
+	recursionForPlagiarism.detectASample(query)
+
+runDetection()
 
 #test_main(20,31)
-addTestLyrics(['http://genius.com/Kanye-west-niggas-in-paris-lyrics', 'http://genius.com/A-ap-rocky-electric-body-lyrics', 'http://genius.com/Kanye-west-all-day-lyrics', 'http://genius.com/Jay-z-crown-lyrics', 'http://genius.com/Chris-brown-and-tyga-dgifu-lyrics', 'http://genius.com/Juicy-j-whole-thang-lyrics', 'http://genius.com/Kid-ink-badass-lyrics', 'http://genius.com/Meek-mill-ball-so-hard-lyrics', 'http://genius.com/Lil-wayne-oh-lets-do-it-lyrics', 'http://genius.com/J-cole-chris-tucker-lyrics', 'http://genius.com/Juicy-j-show-out-lyrics', 'http://genius.com/Schoolboy-q-nightmare-on-figg-st-lyrics', 'http://genius.com/Dj-khaled-fed-up-lyrics', 'http://genius.com/Dj-khaled-fed-up-lyrics', 'http://genius.com/Meek-mill-im-rollin-lyrics'])
+# addTestLyrics(['http://genius.com/Kanye-west-niggas-in-paris-lyrics',
+# 	'http://genius.com/A-ap-rocky-electric-body-lyrics',
+# 	'http://genius.com/Kanye-west-all-day-lyrics',
+# 	'http://genius.com/Jay-z-crown-lyrics',
+# 	'http://genius.com/Chris-brown-and-tyga-dgifu-lyrics',
+# 	'http://genius.com/Juicy-j-whole-thang-lyrics',
+# 	'http://genius.com/Kid-ink-badass-lyrics',
+# 	'http://genius.com/Meek-mill-ball-so-hard-lyrics',
+# 	'http://genius.com/Lil-wayne-oh-lets-do-it-lyrics', 
+# 	'http://genius.com/J-cole-chris-tucker-lyrics', 
+# 	'http://genius.com/Juicy-j-show-out-lyrics', 
+# 	'http://genius.com/Schoolboy-q-nightmare-on-figg-st-lyrics', 
+# 	'http://genius.com/Dj-khaled-fed-up-lyrics', 
+# 	'http://genius.com/Dj-khaled-fed-up-lyrics', 
+# 	'http://genius.com/Meek-mill-im-rollin-lyrics'])
