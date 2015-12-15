@@ -44,7 +44,7 @@ def sortTfidfValues(tfidf_values):
 
 	top_10_values = itertools.islice(sorted_tfidf, 0, 20)
 	for song, tfidf in top_10_values:
-		print dBDelegate.getSongURL(db, song), tfidf
+		print dBDelegate.getSongTitle(db, song), tfidf
 
 
 

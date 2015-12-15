@@ -77,7 +77,7 @@ def compareLists(query, relevant_positional_index, possible_document_matches, db
 				if substring_length_from_n > max_substring_length:
 					max_substring_length = substring_length_from_n
 					if max_substring_length == len(query):
-						print dBDelegate.getSongURL(db, document)
+						print dBDelegate.getSongTitle(db, document)
 			
 		# if the song does contain the query, add the document name to a list
 		if max_substring_length > len(query)*.25:
