@@ -40,7 +40,7 @@ def calculateTfidf(query, positional_index, song, avg_songlength, collection_len
 def sortTfidfValues(tfidf_values):
 	sorted_tfidf = sorted(tfidf_values.items(), key=lambda x: (-x[1], x[0]))
 
-	top_10_values = itertools.islice(sorted_tfidf, 0, 10)
+	top_10_values = itertools.islice(sorted_tfidf, 0, 20)
 	for song, tfidf in top_10_values:
 		print dBDelegate.getSongURL(db, song), tfidf
 

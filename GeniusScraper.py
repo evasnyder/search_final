@@ -67,7 +67,7 @@ def lyricHandler(url_list):
 
             new_song = Song(song_title, artist, lyrics, url)
             song_list.append(new_song)
-            
+
     if len(song_list) > 0:
         return song_list
     else:
@@ -96,11 +96,15 @@ def scrapeSongByURL(url):
     page = requests.get(url)
 
     soup = BeautifulSoup(page.text, "lxml")
-    genre_tags = soup.find('p', class_='tags song_meta_item').text
-    print 'yeo' + str(genre_tags)
-        
-    if 'R&B' or 'Pop' or "Rap" in genre_tags:
-        print "We good"
+
+    genre_tags = soup.find('p', class_='tags song_meta_item')
+    if genre_tags != None:
+        genre_tags = genre_tags.text
+        if 'R&B' or 'Pop' or "Rap" in genre_tags:
+            artist = soup.find('span', class_='text_artist').text.strip()
+            lyrics = soup.find('div', class_='lyrics').text.strip()
+            song_title = soup.find('span', class_='text_title').text.strip()
+    else:
         artist = soup.find('span', class_='text_artist').text.strip()
         lyrics = soup.find('div', class_='lyrics').text.strip()
         song_title = soup.find('span', class_='text_title').text.strip()
@@ -117,4 +121,4 @@ def scrapeAnnotationsByURL(url):
             print block.attrs['data-id']
     return soup.prettify()
 
-scrapeSongByURL('http://genius.com/Kendrick-lamar-king-kunta-lyrics')
+scrapeSongByURL('http://genius.com/Meek-mill-ball-so-hard-lyrics')
