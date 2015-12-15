@@ -34,7 +34,7 @@ def getSongID(db, url):
 def getSongURL(db, id):
 	return db.songs.find_one({'_id': ObjectId(id)})["url"]
 
-def getSongTitle
+def getSongTitle(db, id):
 	return db.songs.find_one({'_id': ObjectId(id)})["title"]
 
 def getPositionalIndexForWord(word):
